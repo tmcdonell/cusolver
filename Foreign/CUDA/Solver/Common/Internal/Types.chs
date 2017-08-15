@@ -53,20 +53,28 @@ import Foreign.Ptr
 --
 -- <http://docs.nvidia.com/cuda/cusolver/index.html#cusolverEigType>
 --
+#if CUDA_VERSION >= 8000
 {# enum cusolverEigType_t as EigType
   { underscoreToCase }
   with prefix="CUSOLVER" deriving (Eq, Show) #}
+#else
+data EigType
+#endif
 
 
 -- | This type indicates whether eigenvectors are computed.
 --
 -- <http://docs.nvidia.com/cuda/cusolver/index.html#cusolverEigMode>
 --
+#if CUDA_VERSION >= 8000
 {# enum cusolverEigMode_t as EigMode
   { underscoreToCase
   , CUSOLVER_EIG_MODE_NOVECTOR as NoVector
   }
   with prefix="CUSOLVER_EIG_MODE" deriving (Eq, Show) #}
+#else
+data EigMode
+#endif
 
 
 -- | Indicates the input/output matrix format
