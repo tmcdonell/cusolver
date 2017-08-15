@@ -59,7 +59,7 @@ library
 
       Foreign.CUDA.Solver.Common.Error
 
-  -- other-modules:
+  other-modules:
       Foreign.CUDA.Solver.Common.Internal.C2HS
       Foreign.CUDA.Solver.Common.Internal.Types
 
