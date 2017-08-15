@@ -44,9 +44,10 @@ library
 
   exposed-modules:
       -- Dense LAPACK-like functions
-      -- Foreign.CUDA.Solver.Dense
+      Foreign.CUDA.Solver.Dense
       Foreign.CUDA.Solver.Dense.Context
       Foreign.CUDA.Solver.Dense.Stream
+      Foreign.CUDA.Solver.Dense.Linear
 
       -- Sparse LAPACK-like functions
       -- Foreign.CUDA.Solver.Sparse

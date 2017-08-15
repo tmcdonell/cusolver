@@ -16,6 +16,7 @@ module Foreign.CUDA.Solver.Internal.Types (
   -- Dense
   BLAS.Fill(..),
   BLAS.Operation(..),
+  BLAS.Side(..),
   EigType(..),
   EigMode(..),
 
