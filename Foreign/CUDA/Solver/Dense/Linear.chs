@@ -56,22 +56,10 @@ module Foreign.CUDA.Solver.Dense.Linear (
   dgeqrf,
   cgeqrf,
   zgeqrf,
-  sormqr_bufferSize,
-  dormqr_bufferSize,
-  cunmqr_bufferSize,
-  zunmqr_bufferSize,
   sormqr,
   dormqr,
   cunmqr,
   zunmqr,
-  sorgqr_bufferSize,
-  dorgqr_bufferSize,
-  cungqr_bufferSize,
-  zungqr_bufferSize,
-  sorgqr,
-  dorgqr,
-  cungqr,
-  zungqr,
   ssytrf_bufferSize,
   dsytrf_bufferSize,
   csytrf_bufferSize,
@@ -80,6 +68,18 @@ module Foreign.CUDA.Solver.Dense.Linear (
   dsytrf,
   csytrf,
   zsytrf,
+  sorgqr_bufferSize,
+  dorgqr_bufferSize,
+  cungqr_bufferSize,
+  zungqr_bufferSize,
+  sorgqr,
+  dorgqr,
+  cungqr,
+  zungqr,
+  sormqr_bufferSize,
+  dormqr_bufferSize,
+  cunmqr_bufferSize,
+  zunmqr_bufferSize,
 
 ) where
 
@@ -201,18 +201,6 @@ useHostP = useHostPtr . castHostPtr
 {-# INLINEABLE zgeqrf #-}
 {# fun unsafe cusolverDnZgeqrf as zgeqrf { useHandle `Handle', `Int', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus* #}
 
-{-# INLINEABLE sormqr_bufferSize #-}
-{# fun unsafe cusolverDnSormqr_bufferSize as sormqr_bufferSize { useHandle `Handle', cFromEnum `Side', cFromEnum `Operation', `Int', `Int', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
-
-{-# INLINEABLE dormqr_bufferSize #-}
-{# fun unsafe cusolverDnDormqr_bufferSize as dormqr_bufferSize { useHandle `Handle', cFromEnum `Side', cFromEnum `Operation', `Int', `Int', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
-
-{-# INLINEABLE cunmqr_bufferSize #-}
-{# fun unsafe cusolverDnCunmqr_bufferSize as cunmqr_bufferSize { useHandle `Handle', cFromEnum `Side', cFromEnum `Operation', `Int', `Int', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
-
-{-# INLINEABLE zunmqr_bufferSize #-}
-{# fun unsafe cusolverDnZunmqr_bufferSize as zunmqr_bufferSize { useHandle `Handle', cFromEnum `Side', cFromEnum `Operation', `Int', `Int', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
-
 {-# INLINEABLE sormqr #-}
 {# fun unsafe cusolverDnSormqr as sormqr { useHandle `Handle', cFromEnum `Side', cFromEnum `Operation', `Int', `Int', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus* #}
 
@@ -224,6 +212,31 @@ useHostP = useHostPtr . castHostPtr
 
 {-# INLINEABLE zunmqr #-}
 {# fun unsafe cusolverDnZunmqr as zunmqr { useHandle `Handle', cFromEnum `Side', cFromEnum `Operation', `Int', `Int', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus* #}
+
+{-# INLINEABLE ssytrf_bufferSize #-}
+{# fun unsafe cusolverDnSsytrf_bufferSize as ssytrf_bufferSize { useHandle `Handle', `Int', useDevP `DevicePtr Float', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
+
+{-# INLINEABLE dsytrf_bufferSize #-}
+{# fun unsafe cusolverDnDsytrf_bufferSize as dsytrf_bufferSize { useHandle `Handle', `Int', useDevP `DevicePtr Double', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
+
+{-# INLINEABLE csytrf_bufferSize #-}
+{# fun unsafe cusolverDnCsytrf_bufferSize as csytrf_bufferSize { useHandle `Handle', `Int', useDevP `DevicePtr (Complex Float)', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
+
+{-# INLINEABLE zsytrf_bufferSize #-}
+{# fun unsafe cusolverDnZsytrf_bufferSize as zsytrf_bufferSize { useHandle `Handle', `Int', useDevP `DevicePtr (Complex Double)', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
+
+{-# INLINEABLE ssytrf #-}
+{# fun unsafe cusolverDnSsytrf as ssytrf { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus* #}
+
+{-# INLINEABLE dsytrf #-}
+{# fun unsafe cusolverDnDsytrf as dsytrf { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus* #}
+
+{-# INLINEABLE csytrf #-}
+{# fun unsafe cusolverDnCsytrf as csytrf { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus* #}
+
+{-# INLINEABLE zsytrf #-}
+{# fun unsafe cusolverDnZsytrf as zsytrf { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus* #}
+#if CUDA_VERSION >= 8000
 
 {-# INLINEABLE sorgqr_bufferSize #-}
 {# fun unsafe cusolverDnSorgqr_bufferSize as sorgqr_bufferSize { useHandle `Handle', `Int', `Int', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', castPtr `Ptr Int32' } -> `()' checkStatus* #}
@@ -249,26 +262,52 @@ useHostP = useHostPtr . castHostPtr
 {-# INLINEABLE zungqr #-}
 {# fun unsafe cusolverDnZungqr as zungqr { useHandle `Handle', `Int', `Int', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus* #}
 
-{-# INLINEABLE ssytrf_bufferSize #-}
-{# fun unsafe cusolverDnSsytrf_bufferSize as ssytrf_bufferSize { useHandle `Handle', `Int', useDevP `DevicePtr Float', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
+{-# INLINEABLE sormqr_bufferSize #-}
+{# fun unsafe cusolverDnSormqr_bufferSize as sormqr_bufferSize { useHandle `Handle', cFromEnum `Side', cFromEnum `Operation', `Int', `Int', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
-{-# INLINEABLE dsytrf_bufferSize #-}
-{# fun unsafe cusolverDnDsytrf_bufferSize as dsytrf_bufferSize { useHandle `Handle', `Int', useDevP `DevicePtr Double', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
+{-# INLINEABLE dormqr_bufferSize #-}
+{# fun unsafe cusolverDnDormqr_bufferSize as dormqr_bufferSize { useHandle `Handle', cFromEnum `Side', cFromEnum `Operation', `Int', `Int', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
-{-# INLINEABLE csytrf_bufferSize #-}
-{# fun unsafe cusolverDnCsytrf_bufferSize as csytrf_bufferSize { useHandle `Handle', `Int', useDevP `DevicePtr (Complex Float)', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
+{-# INLINEABLE cunmqr_bufferSize #-}
+{# fun unsafe cusolverDnCunmqr_bufferSize as cunmqr_bufferSize { useHandle `Handle', cFromEnum `Side', cFromEnum `Operation', `Int', `Int', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
 
-{-# INLINEABLE zsytrf_bufferSize #-}
-{# fun unsafe cusolverDnZsytrf_bufferSize as zsytrf_bufferSize { useHandle `Handle', `Int', useDevP `DevicePtr (Complex Double)', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
+{-# INLINEABLE zunmqr_bufferSize #-}
+{# fun unsafe cusolverDnZunmqr_bufferSize as zunmqr_bufferSize { useHandle `Handle', cFromEnum `Side', cFromEnum `Operation', `Int', `Int', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', castPtr `Ptr Int32' } -> `()' checkStatus* #}
+#else
 
-{-# INLINEABLE ssytrf #-}
-{# fun unsafe cusolverDnSsytrf as ssytrf { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus* #}
+sorgqr_bufferSize :: Handle -> Int -> Int -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Ptr Int32 -> IO ()
+sorgqr_bufferSize _ _ _ _ _ _ _ _ = cusolverError "'sorgqr_bufferSize' requires at least cuda-8.0"
 
-{-# INLINEABLE dsytrf #-}
-{# fun unsafe cusolverDnDsytrf as dsytrf { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus* #}
+dorgqr_bufferSize :: Handle -> Int -> Int -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Ptr Int32 -> IO ()
+dorgqr_bufferSize _ _ _ _ _ _ _ _ = cusolverError "'dorgqr_bufferSize' requires at least cuda-8.0"
 
-{-# INLINEABLE csytrf #-}
-{# fun unsafe cusolverDnCsytrf as csytrf { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus* #}
+cungqr_bufferSize :: Handle -> Int -> Int -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Ptr Int32 -> IO ()
+cungqr_bufferSize _ _ _ _ _ _ _ _ = cusolverError "'cungqr_bufferSize' requires at least cuda-8.0"
 
-{-# INLINEABLE zsytrf #-}
-{# fun unsafe cusolverDnZsytrf as zsytrf { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus* #}
+zungqr_bufferSize :: Handle -> Int -> Int -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Ptr Int32 -> IO ()
+zungqr_bufferSize _ _ _ _ _ _ _ _ = cusolverError "'zungqr_bufferSize' requires at least cuda-8.0"
+
+sorgqr :: Handle -> Int -> Int -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Int32 -> IO ()
+sorgqr _ _ _ _ _ _ _ _ _ _ = cusolverError "'sorgqr' requires at least cuda-8.0"
+
+dorgqr :: Handle -> Int -> Int -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Int32 -> IO ()
+dorgqr _ _ _ _ _ _ _ _ _ _ = cusolverError "'dorgqr' requires at least cuda-8.0"
+
+cungqr :: Handle -> Int -> Int -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> IO ()
+cungqr _ _ _ _ _ _ _ _ _ _ = cusolverError "'cungqr' requires at least cuda-8.0"
+
+zungqr :: Handle -> Int -> Int -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> IO ()
+zungqr _ _ _ _ _ _ _ _ _ _ = cusolverError "'zungqr' requires at least cuda-8.0"
+
+sormqr_bufferSize :: Handle -> Side -> Operation -> Int -> Int -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> Ptr Int32 -> IO ()
+sormqr_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'sormqr_bufferSize' requires at least cuda-8.0"
+
+dormqr_bufferSize :: Handle -> Side -> Operation -> Int -> Int -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> Ptr Int32 -> IO ()
+dormqr_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dormqr_bufferSize' requires at least cuda-8.0"
+
+cunmqr_bufferSize :: Handle -> Side -> Operation -> Int -> Int -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> Ptr Int32 -> IO ()
+cunmqr_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cunmqr_bufferSize' requires at least cuda-8.0"
+
+zunmqr_bufferSize :: Handle -> Side -> Operation -> Int -> Int -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> Ptr Int32 -> IO ()
+zunmqr_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zunmqr_bufferSize' requires at least cuda-8.0"
+#endif

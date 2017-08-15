@@ -33,7 +33,9 @@ main = do
                 ]
   --
   mkC2HS "Dense" "Linear" (docs "cuds-linearsolver") d1exp
-    [(Nothing,   funs_denseLinear)]
+    [(Nothing,   funs_denseLinear)
+    ,(Just 8000, funs_denseLinear_cuda80)
+    ]
 
 mkC2HS :: String -> String -> [String] -> [String] -> [(Maybe Int, [FunGroup])] -> IO ()
 mkC2HS grp mdl docs exps funs =
@@ -387,16 +389,20 @@ funs_denseLinear =
   , gpA $ \ a   -> dn "?getrs"            [ transpose, int, int, dptr a, int, dptr int32, dptr a, int, dptr int32 ]
   , gpA $ \ a   -> dn "?geqrf_bufferSize" [ int, int, dptr a, int, ptr int32 ]
   , gpA $ \ a   -> dn "?geqrf"            [ int, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
-  , gpR $ \ a   -> dn "?ormqr_bufferSize" [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, ptr int32 ]
-  , gpC $ \ a   -> dn "?unmqr_bufferSize" [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, ptr int32 ]
   , gpR $ \ a   -> dn "?ormqr"            [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, dptr a, int, dptr int32 ]
   , gpC $ \ a   -> dn "?unmqr"            [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, dptr a, int, dptr int32 ]
-  , gpR $ \ a   -> dn "?orgqr_bufferSize" [ int, int, int, dptr a, int, dptr a, ptr int32 ]
+  , gpA $ \ a   -> dn "?sytrf_bufferSize" [ int, dptr a, int, ptr int32 ]
+  , gpA $ \ a   -> dn "?sytrf"            [ uplo, int, dptr a, int, dptr int32, dptr a, int, dptr int32 ]
+  ]
+
+funs_denseLinear_cuda80 :: [FunGroup]
+funs_denseLinear_cuda80 =
+  [ gpR $ \ a   -> dn "?orgqr_bufferSize" [ int, int, int, dptr a, int, dptr a, ptr int32 ]
   , gpC $ \ a   -> dn "?ungqr_bufferSize" [ int, int, int, dptr a, int, dptr a, ptr int32 ]
   , gpR $ \ a   -> dn "?orgqr"            [ int, int, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
   , gpC $ \ a   -> dn "?ungqr"            [ int, int, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
-  , gpA $ \ a   -> dn "?sytrf_bufferSize" [ int, dptr a, int, ptr int32 ]
-  , gpA $ \ a   -> dn "?sytrf"            [ uplo, int, dptr a, int, dptr int32, dptr a, int, dptr int32 ]
+  , gpR $ \ a   -> dn "?ormqr_bufferSize" [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, ptr int32 ]
+  , gpC $ \ a   -> dn "?unmqr_bufferSize" [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, ptr int32 ]
   ]
 
 
