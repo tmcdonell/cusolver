@@ -18,7 +18,7 @@ module Foreign.CUDA.Solver.Dense.Stream (
 
 import Foreign.CUDA.Driver.Stream
 import Foreign.CUDA.Solver.Dense.Context
-import Foreign.CUDA.Solver.Common.Internal.C2HS
+import Foreign.CUDA.Solver.Internal.C2HS
 
 import Foreign.C
 import Foreign.Ptr

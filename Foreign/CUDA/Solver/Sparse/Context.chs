@@ -20,8 +20,8 @@ module Foreign.CUDA.Solver.Sparse.Context (
 ) where
 
 -- Friends
-import Foreign.CUDA.Solver.Common.Error
-import Foreign.CUDA.Solver.Common.Internal.C2HS
+import Foreign.CUDA.Solver.Error
+import Foreign.CUDA.Solver.Internal.C2HS
 
 -- System
 import Foreign

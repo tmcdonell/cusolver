@@ -2,7 +2,7 @@
 {-# LANGUAGE EmptyDataDecls           #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 -- |
--- Module      : Foreign.CUDA.Solver.Common.Internal.Types
+-- Module      : Foreign.CUDA.Solver.Internal.Types
 -- Copyright   : [2017] Trevor L. McDonell
 -- License     : BSD3
 --
@@ -11,7 +11,7 @@
 -- Portability : non-portable (GHC extensions)
 --
 
-module Foreign.CUDA.Solver.Common.Internal.Types (
+module Foreign.CUDA.Solver.Internal.Types (
 
   -- Dense
   BLAS.Fill(..),

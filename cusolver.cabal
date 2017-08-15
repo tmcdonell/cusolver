@@ -57,11 +57,11 @@ library
       -- Foreign.CUDA.Solver.Refactorisation
       Foreign.CUDA.Solver.Refactorisation.Context
 
-      Foreign.CUDA.Solver.Common.Error
+      Foreign.CUDA.Solver.Error
 
   other-modules:
-      Foreign.CUDA.Solver.Common.Internal.C2HS
-      Foreign.CUDA.Solver.Common.Internal.Types
+      Foreign.CUDA.Solver.Internal.C2HS
+      Foreign.CUDA.Solver.Internal.Types
 
   build-depends:
       base                              == 4.*

@@ -2,7 +2,7 @@
 {-# LANGUAGE DeriveDataTypeable       #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 -- |
--- Module      : Foreign.CUDA.Solver.Common.Error
+-- Module      : Foreign.CUDA.Solver.Error
 -- Copyright   : [2017] Trevor L. McDonell
 -- License     : BSD3
 --
@@ -11,7 +11,7 @@
 -- Portability : non-portable (GHC extensions)
 --
 
-module Foreign.CUDA.Solver.Common.Error
+module Foreign.CUDA.Solver.Error
   where
 
 -- System

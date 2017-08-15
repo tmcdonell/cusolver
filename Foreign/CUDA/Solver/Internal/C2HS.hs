@@ -1,5 +1,5 @@
 -- |
--- Module      : Foreign.CUDA.Solver.Common.Internal.C2HS
+-- Module      : Foreign.CUDA.Solver.Internal.C2HS
 -- Copyright   : [2017] Trevor L. McDonell
 -- License     : BSD3
 --
@@ -8,7 +8,7 @@
 -- Portability : non-portable (GHC extensions)
 --
 
-module Foreign.CUDA.Solver.Common.Internal.C2HS (
+module Foreign.CUDA.Solver.Internal.C2HS (
 
   -- * Conversion between C and Haskell types
   cIntConv, cFloatConv, cToBool, cFromBool, cToEnum, cFromEnum,
@@ -22,7 +22,7 @@ module Foreign.CUDA.Solver.Common.Internal.C2HS (
 ) where
 
 -- Friends
-import Foreign.CUDA.Solver.Common.Error
+import Foreign.CUDA.Solver.Error
 
 -- System
 import Data.Complex
