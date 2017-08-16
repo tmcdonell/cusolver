@@ -48,13 +48,10 @@ newtype Handle = Handle { useHandle :: {# type cusolverRfHandle_t #}}
 -- <http://docs.nvidia.com/cuda/cusolver/index.html#glu-lt-t-gt-create>
 --
 {-# INLINEABLE create #-}
-create :: IO Handle
-create = resultIfOk =<< cusolverRfCreate
+{# fun unsafe cusolverRfCreate as create
+  { alloca- `Handle' peekHdl* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusolverRfCreate
-      { alloca- `Handle' peekHdl* } -> `Status' cToEnum #}
-      where
-        peekHdl = liftM Handle . peek
+    peekHdl = liftM Handle . peek
 
 -- | This function releases resources used by the cuSolverRF library.
 --

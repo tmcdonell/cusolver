@@ -48,13 +48,10 @@ newtype Handle = Handle { useHandle :: {# type cusolverDnHandle_t #}}
 -- <http://docs.nvidia.com/cuda/cusolver/index.html#cuSolverDNcreate>
 --
 {-# INLINEABLE create #-}
-create :: IO Handle
-create = resultIfOk =<< cusolverDnCreate
+{# fun unsafe cusolverDnCreate as create
+  { alloca- `Handle' peekHdl* } -> `()' checkStatus*- #}
   where
-    {# fun unsafe cusolverDnCreate
-      { alloca- `Handle' peekHdl* } -> `Status' cToEnum #}
-      where
-        peekHdl = liftM Handle . peek
+    peekHdl = liftM Handle . peek
 
 -- | This function releases resources used by the cuSolverDN library.
 --
