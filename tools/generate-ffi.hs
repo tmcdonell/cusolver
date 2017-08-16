@@ -47,6 +47,7 @@ main = do
 
   mkC2HS "Dense" "Eigenvalue" (docs "cuds-eigensolver") d2exp
     [(Nothing,   funs_denseEigen)
+    ,(Just 8000, funs_denseEigen_cuda80)
     ]
 
 mkC2HS :: String -> String -> [String] -> [String] -> [(Maybe Int, [FunGroup])] -> IO ()
@@ -442,7 +443,13 @@ funs_denseEigen :: [FunGroup]
 funs_denseEigen =
   [ gpA $ \ _   -> dn "?gebrd_bufferSize" [ int, int, result int ]
   , gpA $ \ a   -> dn "?gebrd"            [ int, int, dptr a, int, dptr a, dptr a, dptr a, dptr a, dptr a, int, dptr int32 ]
-  , gpR $ \ a   -> dn "?orgbr_bufferSize" [ side, int, int, int, dptr a, int, dptr a, result int ]
+  , gpA $ \ _   -> dn "?gesvd_bufferSize" [ int, int, result int ]
+  , gpA $ \ a   -> dn "?gesvd"            [ char, char, int, int, dptr a, int, dptr a, dptr a, int, dptr a, int, dptr a, int, dptr a, dptr int32 ]
+  ]
+
+funs_denseEigen_cuda80 :: [FunGroup]
+funs_denseEigen_cuda80 =
+  [ gpR $ \ a   -> dn "?orgbr_bufferSize" [ side, int, int, int, dptr a, int, dptr a, result int ]
   , gpC $ \ a   -> dn "?ungbr_bufferSize" [ side, int, int, int, dptr a, int, dptr a, result int ]
   , gpR $ \ a   -> dn "?orgbr"            [ side, int, int, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
   , gpC $ \ a   -> dn "?ungbr"            [ side, int, int, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
@@ -458,8 +465,6 @@ funs_denseEigen =
   , gpC $ \ a   -> dn "?ungtr_bufferSize" [ uplo, int, dptr a, int, dptr a, result int ]
   , gpR $ \ a   -> dn "?orgtr"            [ uplo, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
   , gpC $ \ a   -> dn "?ungtr"            [ uplo, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
-  , gpA $ \ _   -> dn "?gesvd_bufferSize" [ int, int, result int ]
-  , gpA $ \ a   -> dn "?gesvd"            [ char, char, int, int, dptr a, int, dptr a, dptr a, int, dptr a, int, dptr a, int, dptr a, dptr int32 ]
   , gpR $ \ a   -> dn "?syevd_bufferSize" [ eigmode, uplo, int, dptr a, int, dptr a, result int ]
   , gpC $ \ a   -> dn "?heevd_bufferSize" [ eigmode, uplo, int, dptr a, int, dptr a, result int ]
   , gpR $ \ a   -> dn "?syevd"            [ eigmode, uplo, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]

@@ -36,6 +36,14 @@ module Foreign.CUDA.Solver.Dense.Eigenvalue (
   dgebrd,
   cgebrd,
   zgebrd,
+  sgesvd_bufferSize,
+  dgesvd_bufferSize,
+  cgesvd_bufferSize,
+  zgesvd_bufferSize,
+  sgesvd,
+  dgesvd,
+  cgesvd,
+  zgesvd,
   sorgbr_bufferSize,
   dorgbr_bufferSize,
   cungbr_bufferSize,
@@ -68,14 +76,6 @@ module Foreign.CUDA.Solver.Dense.Eigenvalue (
   dorgtr,
   cungtr,
   zungtr,
-  sgesvd_bufferSize,
-  dgesvd_bufferSize,
-  cgesvd_bufferSize,
-  zgesvd_bufferSize,
-  sgesvd,
-  dgesvd,
-  cgesvd,
-  zgesvd,
   ssyevd_bufferSize,
   dsyevd_bufferSize,
   cheevd_bufferSize,
@@ -140,6 +140,31 @@ useHostP = useHostPtr . castHostPtr
 
 {-# INLINEABLE zgebrd #-}
 {# fun unsafe cusolverDnZgebrd as zgebrd { useHandle `Handle', `Int', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE sgesvd_bufferSize #-}
+{# fun unsafe cusolverDnSgesvd_bufferSize as sgesvd_bufferSize { useHandle `Handle', `Int', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dgesvd_bufferSize #-}
+{# fun unsafe cusolverDnDgesvd_bufferSize as dgesvd_bufferSize { useHandle `Handle', `Int', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cgesvd_bufferSize #-}
+{# fun unsafe cusolverDnCgesvd_bufferSize as cgesvd_bufferSize { useHandle `Handle', `Int', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zgesvd_bufferSize #-}
+{# fun unsafe cusolverDnZgesvd_bufferSize as zgesvd_bufferSize { useHandle `Handle', `Int', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE sgesvd #-}
+{# fun unsafe cusolverDnSgesvd as sgesvd { useHandle `Handle', `Char', `Char', `Int', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dgesvd #-}
+{# fun unsafe cusolverDnDgesvd as dgesvd { useHandle `Handle', `Char', `Char', `Int', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cgesvd #-}
+{# fun unsafe cusolverDnCgesvd as cgesvd { useHandle `Handle', `Char', `Char', `Int', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zgesvd #-}
+{# fun unsafe cusolverDnZgesvd as zgesvd { useHandle `Handle', `Char', `Char', `Int', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+#if CUDA_VERSION >= 8000
 
 {-# INLINEABLE sorgbr_bufferSize #-}
 {# fun unsafe cusolverDnSorgbr_bufferSize as sorgbr_bufferSize { useHandle `Handle', cFromEnum `Side', `Int', `Int', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
@@ -237,30 +262,6 @@ useHostP = useHostPtr . castHostPtr
 {-# INLINEABLE zungtr #-}
 {# fun unsafe cusolverDnZungtr as zungtr { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
 
-{-# INLINEABLE sgesvd_bufferSize #-}
-{# fun unsafe cusolverDnSgesvd_bufferSize as sgesvd_bufferSize { useHandle `Handle', `Int', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
-
-{-# INLINEABLE dgesvd_bufferSize #-}
-{# fun unsafe cusolverDnDgesvd_bufferSize as dgesvd_bufferSize { useHandle `Handle', `Int', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
-
-{-# INLINEABLE cgesvd_bufferSize #-}
-{# fun unsafe cusolverDnCgesvd_bufferSize as cgesvd_bufferSize { useHandle `Handle', `Int', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
-
-{-# INLINEABLE zgesvd_bufferSize #-}
-{# fun unsafe cusolverDnZgesvd_bufferSize as zgesvd_bufferSize { useHandle `Handle', `Int', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
-
-{-# INLINEABLE sgesvd #-}
-{# fun unsafe cusolverDnSgesvd as sgesvd { useHandle `Handle', `Char', `Char', `Int', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
-
-{-# INLINEABLE dgesvd #-}
-{# fun unsafe cusolverDnDgesvd as dgesvd { useHandle `Handle', `Char', `Char', `Int', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
-
-{-# INLINEABLE cgesvd #-}
-{# fun unsafe cusolverDnCgesvd as cgesvd { useHandle `Handle', `Char', `Char', `Int', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
-
-{-# INLINEABLE zgesvd #-}
-{# fun unsafe cusolverDnZgesvd as zgesvd { useHandle `Handle', `Char', `Char', `Int', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
-
 {-# INLINEABLE ssyevd_bufferSize #-}
 {# fun unsafe cusolverDnSsyevd_bufferSize as ssyevd_bufferSize { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
 
@@ -308,3 +309,149 @@ useHostP = useHostPtr . castHostPtr
 
 {-# INLINEABLE zhegvd #-}
 {# fun unsafe cusolverDnZhegvd as zhegvd { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+#else
+
+sorgbr_bufferSize :: Handle -> Side -> Int -> Int -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> IO ()
+sorgbr_bufferSize _ _ _ _ _ _ _ _ _ = cusolverError "'sorgbr_bufferSize' requires at least cuda-8.0"
+
+dorgbr_bufferSize :: Handle -> Side -> Int -> Int -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> IO ()
+dorgbr_bufferSize _ _ _ _ _ _ _ _ _ = cusolverError "'dorgbr_bufferSize' requires at least cuda-8.0"
+
+cungbr_bufferSize :: Handle -> Side -> Int -> Int -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> IO ()
+cungbr_bufferSize _ _ _ _ _ _ _ _ _ = cusolverError "'cungbr_bufferSize' requires at least cuda-8.0"
+
+zungbr_bufferSize :: Handle -> Side -> Int -> Int -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> IO ()
+zungbr_bufferSize _ _ _ _ _ _ _ _ _ = cusolverError "'zungbr_bufferSize' requires at least cuda-8.0"
+
+sorgbr :: Handle -> Side -> Int -> Int -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Int32 -> IO ()
+sorgbr _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'sorgbr' requires at least cuda-8.0"
+
+dorgbr :: Handle -> Side -> Int -> Int -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Int32 -> IO ()
+dorgbr _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dorgbr' requires at least cuda-8.0"
+
+cungbr :: Handle -> Side -> Int -> Int -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> IO ()
+cungbr _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cungbr' requires at least cuda-8.0"
+
+zungbr :: Handle -> Side -> Int -> Int -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> IO ()
+zungbr _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zungbr' requires at least cuda-8.0"
+
+ssytrd_bufferSize :: Handle -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> Int -> IO ()
+ssytrd_bufferSize _ _ _ _ _ _ _ _ _ = cusolverError "'ssytrd_bufferSize' requires at least cuda-8.0"
+
+dsytrd_bufferSize :: Handle -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> Int -> IO ()
+dsytrd_bufferSize _ _ _ _ _ _ _ _ _ = cusolverError "'dsytrd_bufferSize' requires at least cuda-8.0"
+
+chetrd_bufferSize :: Handle -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> IO ()
+chetrd_bufferSize _ _ _ _ _ _ _ _ _ = cusolverError "'chetrd_bufferSize' requires at least cuda-8.0"
+
+zhetrd_bufferSize :: Handle -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> IO ()
+zhetrd_bufferSize _ _ _ _ _ _ _ _ _ = cusolverError "'zhetrd_bufferSize' requires at least cuda-8.0"
+
+ssytrd :: Handle -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Int32 -> IO ()
+ssytrd _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'ssytrd' requires at least cuda-8.0"
+
+dsytrd :: Handle -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Int32 -> IO ()
+dsytrd _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dsytrd' requires at least cuda-8.0"
+
+chetrd :: Handle -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> IO ()
+chetrd _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'chetrd' requires at least cuda-8.0"
+
+zhetrd :: Handle -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> IO ()
+zhetrd _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zhetrd' requires at least cuda-8.0"
+
+sormtr_bufferSize :: Handle -> Side -> Fill -> Operation -> Int -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> Int -> IO ()
+sormtr_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'sormtr_bufferSize' requires at least cuda-8.0"
+
+dormtr_bufferSize :: Handle -> Side -> Fill -> Operation -> Int -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> Int -> IO ()
+dormtr_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dormtr_bufferSize' requires at least cuda-8.0"
+
+cunmtr_bufferSize :: Handle -> Side -> Fill -> Operation -> Int -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> Int -> IO ()
+cunmtr_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cunmtr_bufferSize' requires at least cuda-8.0"
+
+zunmtr_bufferSize :: Handle -> Side -> Fill -> Operation -> Int -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> Int -> IO ()
+zunmtr_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zunmtr_bufferSize' requires at least cuda-8.0"
+
+sormtr :: Handle -> Side -> Fill -> Operation -> Int -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> DevicePtr Int32 -> IO ()
+sormtr _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'sormtr' requires at least cuda-8.0"
+
+dormtr :: Handle -> Side -> Fill -> Operation -> Int -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> DevicePtr Int32 -> IO ()
+dormtr _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dormtr' requires at least cuda-8.0"
+
+cunmtr :: Handle -> Side -> Fill -> Operation -> Int -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> IO ()
+cunmtr _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cunmtr' requires at least cuda-8.0"
+
+zunmtr :: Handle -> Side -> Fill -> Operation -> Int -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> IO ()
+zunmtr _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zunmtr' requires at least cuda-8.0"
+
+sorgtr_bufferSize :: Handle -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> IO ()
+sorgtr_bufferSize _ _ _ _ _ _ _ = cusolverError "'sorgtr_bufferSize' requires at least cuda-8.0"
+
+dorgtr_bufferSize :: Handle -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> IO ()
+dorgtr_bufferSize _ _ _ _ _ _ _ = cusolverError "'dorgtr_bufferSize' requires at least cuda-8.0"
+
+cungtr_bufferSize :: Handle -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> IO ()
+cungtr_bufferSize _ _ _ _ _ _ _ = cusolverError "'cungtr_bufferSize' requires at least cuda-8.0"
+
+zungtr_bufferSize :: Handle -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> IO ()
+zungtr_bufferSize _ _ _ _ _ _ _ = cusolverError "'zungtr_bufferSize' requires at least cuda-8.0"
+
+sorgtr :: Handle -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Int32 -> IO ()
+sorgtr _ _ _ _ _ _ _ _ _ = cusolverError "'sorgtr' requires at least cuda-8.0"
+
+dorgtr :: Handle -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Int32 -> IO ()
+dorgtr _ _ _ _ _ _ _ _ _ = cusolverError "'dorgtr' requires at least cuda-8.0"
+
+cungtr :: Handle -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> IO ()
+cungtr _ _ _ _ _ _ _ _ _ = cusolverError "'cungtr' requires at least cuda-8.0"
+
+zungtr :: Handle -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> IO ()
+zungtr _ _ _ _ _ _ _ _ _ = cusolverError "'zungtr' requires at least cuda-8.0"
+
+ssyevd_bufferSize :: Handle -> EigMode -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> IO ()
+ssyevd_bufferSize _ _ _ _ _ _ _ _ = cusolverError "'ssyevd_bufferSize' requires at least cuda-8.0"
+
+dsyevd_bufferSize :: Handle -> EigMode -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> IO ()
+dsyevd_bufferSize _ _ _ _ _ _ _ _ = cusolverError "'dsyevd_bufferSize' requires at least cuda-8.0"
+
+cheevd_bufferSize :: Handle -> EigMode -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> IO ()
+cheevd_bufferSize _ _ _ _ _ _ _ _ = cusolverError "'cheevd_bufferSize' requires at least cuda-8.0"
+
+zheevd_bufferSize :: Handle -> EigMode -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> IO ()
+zheevd_bufferSize _ _ _ _ _ _ _ _ = cusolverError "'zheevd_bufferSize' requires at least cuda-8.0"
+
+ssyevd :: Handle -> EigMode -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Int32 -> IO ()
+ssyevd _ _ _ _ _ _ _ _ _ _ = cusolverError "'ssyevd' requires at least cuda-8.0"
+
+dsyevd :: Handle -> EigMode -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Int32 -> IO ()
+dsyevd _ _ _ _ _ _ _ _ _ _ = cusolverError "'dsyevd' requires at least cuda-8.0"
+
+cheevd :: Handle -> EigMode -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> IO ()
+cheevd _ _ _ _ _ _ _ _ _ _ = cusolverError "'cheevd' requires at least cuda-8.0"
+
+zheevd :: Handle -> EigMode -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> IO ()
+zheevd _ _ _ _ _ _ _ _ _ _ = cusolverError "'zheevd' requires at least cuda-8.0"
+
+ssygvd_bufferSize :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> IO ()
+ssygvd_bufferSize _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'ssygvd_bufferSize' requires at least cuda-8.0"
+
+dsygvd_bufferSize :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> IO ()
+dsygvd_bufferSize _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dsygvd_bufferSize' requires at least cuda-8.0"
+
+chegvd_bufferSize :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> IO ()
+chegvd_bufferSize _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'chegvd_bufferSize' requires at least cuda-8.0"
+
+zhegvd_bufferSize :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> IO ()
+zhegvd_bufferSize _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zhegvd_bufferSize' requires at least cuda-8.0"
+
+ssygvd :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Int32 -> IO ()
+ssygvd _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'ssygvd' requires at least cuda-8.0"
+
+dsygvd :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Int32 -> IO ()
+dsygvd _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dsygvd' requires at least cuda-8.0"
+
+chegvd :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> IO ()
+chegvd _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'chegvd' requires at least cuda-8.0"
+
+zhegvd :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> IO ()
+zhegvd _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zhegvd' requires at least cuda-8.0"
+#endif
