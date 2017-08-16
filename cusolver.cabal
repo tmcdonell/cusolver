@@ -48,6 +48,7 @@ library
       Foreign.CUDA.Solver.Dense.Context
       Foreign.CUDA.Solver.Dense.Stream
       Foreign.CUDA.Solver.Dense.Linear
+      Foreign.CUDA.Solver.Dense.Eigenvalue
 
       -- Sparse LAPACK-like functions
       -- Foreign.CUDA.Solver.Sparse

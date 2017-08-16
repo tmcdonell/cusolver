@@ -30,11 +30,23 @@ main = do
       -- extra module exports
       d1exp   = [ "Handle"
                 , "Fill(..)"
+                , "Side(..)"
+                ]
+      d2exp   = [ "Handle"
+                , "Fill(..)"
+                , "Side(..)"
+                , "Operation(..)"
+                , "EigMode(..)"
+                , "EigType(..)"
                 ]
   --
   mkC2HS "Dense" "Linear" (docs "cuds-linearsolver") d1exp
     [(Nothing,   funs_denseLinear)
     ,(Just 8000, funs_denseLinear_cuda80)
+    ]
+
+  mkC2HS "Dense" "Eigenvalue" (docs "cuds-eigensolver") d2exp
+    [(Nothing,   funs_denseEigen)
     ]
 
 mkC2HS :: String -> String -> [String] -> [String] -> [(Maybe Int, [FunGroup])] -> IO ()
@@ -166,6 +178,7 @@ data Type
   | TFloat            -- ^ 32-bit floating-point
   | TDouble           -- ^ 64-bit floating-point
   | TComplex Type
+  | TChar
   | TEnum String
   | TPrim String String String
   | TDummy Int        -- ^ Used for extracting the bound variables
@@ -294,6 +307,7 @@ convType = \case
   TVoid             -> simple "()"
   TInt ms           -> simple (maybe "Int" (printf "Int%d") ms)
   TEnum t           -> enum t
+  TChar             -> simple "Char"
   THalf             -> floating "Half"
   TFloat            -> floating "Float"
   TDouble           -> floating "Double"
@@ -345,6 +359,9 @@ int64 = TInt (Just 64)
 half :: Type
 half = THalf
 
+char :: Type
+char = TChar
+
 float :: Type
 float = TFloat
 
@@ -362,6 +379,12 @@ uplo = TEnum "Fill"
 
 side :: Type
 side = TEnum "Side"
+
+eigmode :: Type
+eigmode = TEnum "EigMode"
+
+eigtype :: Type
+eigtype = TEnum "EigType"
 
 matdescr :: Type
 matdescr = TPrim "useMatDescr" "MatrixDescriptor" ""
@@ -408,6 +431,43 @@ funs_denseLinear_cuda80 =
   , gpC $ \ a   -> dn "?ungqr"            [ int, int, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
   , gpR $ \ a   -> dn "?ormqr_bufferSize" [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, result int ]
   , gpC $ \ a   -> dn "?unmqr_bufferSize" [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, result int ]
+  ]
+
+
+-- | Dense eigenvalue solver functions
+--
+-- <http://docs.nvidia.com/cuda/cusolver/index.html#cuds-eigensolver-reference>
+--
+funs_denseEigen :: [FunGroup]
+funs_denseEigen =
+  [ gpA $ \ _   -> dn "?gebrd_bufferSize" [ int, int, result int ]
+  , gpA $ \ a   -> dn "?gebrd"            [ int, int, dptr a, int, dptr a, dptr a, dptr a, dptr a, dptr a, int, dptr int32 ]
+  , gpR $ \ a   -> dn "?orgbr_bufferSize" [ side, int, int, int, dptr a, int, dptr a, result int ]
+  , gpC $ \ a   -> dn "?ungbr_bufferSize" [ side, int, int, int, dptr a, int, dptr a, result int ]
+  , gpR $ \ a   -> dn "?orgbr"            [ side, int, int, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
+  , gpC $ \ a   -> dn "?ungbr"            [ side, int, int, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
+  , gpR $ \ a   -> dn "?sytrd_bufferSize" [ uplo, int, dptr a, int, dptr a, dptr a, dptr a, result int ]
+  , gpC $ \ a   -> dn "?hetrd_bufferSize" [ uplo, int, dptr a, int, dptr a, dptr a, dptr a, result int ]
+  , gpR $ \ a   -> dn "?sytrd"            [ uplo, int, dptr a, int, dptr a, dptr a, dptr a, dptr a, int, dptr int32 ]
+  , gpC $ \ a   -> dn "?hetrd"            [ uplo, int, dptr a, int, dptr a, dptr a, dptr a, dptr a, int, dptr int32 ]
+  , gpR $ \ a   -> dn "?ormtr_bufferSize" [ side, uplo, transpose, int, int, dptr a, int, dptr a, dptr a, int, result int ]
+  , gpC $ \ a   -> dn "?unmtr_bufferSize" [ side, uplo, transpose, int, int, dptr a, int, dptr a, dptr a, int, result int ]
+  , gpR $ \ a   -> dn "?ormtr"            [ side, uplo, transpose, int, int, dptr a, int, dptr a, dptr a, int, dptr a, int, dptr int32 ]
+  , gpC $ \ a   -> dn "?unmtr"            [ side, uplo, transpose, int, int, dptr a, int, dptr a, dptr a, int, dptr a, int, dptr int32 ]
+  , gpR $ \ a   -> dn "?orgtr_bufferSize" [ uplo, int, dptr a, int, dptr a, result int ]
+  , gpC $ \ a   -> dn "?ungtr_bufferSize" [ uplo, int, dptr a, int, dptr a, result int ]
+  , gpR $ \ a   -> dn "?orgtr"            [ uplo, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
+  , gpC $ \ a   -> dn "?ungtr"            [ uplo, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
+  , gpA $ \ _   -> dn "?gesvd_bufferSize" [ int, int, result int ]
+  , gpA $ \ a   -> dn "?gesvd"            [ char, char, int, int, dptr a, int, dptr a, dptr a, int, dptr a, int, dptr a, int, dptr a, dptr int32 ]
+  , gpR $ \ a   -> dn "?syevd_bufferSize" [ eigmode, uplo, int, dptr a, int, dptr a, result int ]
+  , gpC $ \ a   -> dn "?heevd_bufferSize" [ eigmode, uplo, int, dptr a, int, dptr a, result int ]
+  , gpR $ \ a   -> dn "?syevd"            [ eigmode, uplo, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
+  , gpC $ \ a   -> dn "?heevd"            [ eigmode, uplo, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
+  , gpR $ \ a   -> dn "?sygvd_bufferSize" [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, result int ]
+  , gpC $ \ a   -> dn "?hegvd_bufferSize" [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, result int ]
+  , gpR $ \ a   -> dn "?sygvd"            [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
+  , gpC $ \ a   -> dn "?hegvd"            [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
   ]
 
 

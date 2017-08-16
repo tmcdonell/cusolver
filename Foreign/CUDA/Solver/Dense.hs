@@ -39,6 +39,7 @@ module Foreign.CUDA.Solver.Dense (
 
   -- * Operations
   module Foreign.CUDA.Solver.Dense.Linear,
+  module Foreign.CUDA.Solver.Dense.Eigenvalue,
 
 ) where
 
@@ -47,4 +48,5 @@ import Foreign.CUDA.Solver.Dense.Stream
 import Foreign.CUDA.Solver.Error
 
 import Foreign.CUDA.Solver.Dense.Linear
+import Foreign.CUDA.Solver.Dense.Eigenvalue
 

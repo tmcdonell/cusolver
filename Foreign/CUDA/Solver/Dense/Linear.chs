@@ -24,6 +24,7 @@ module Foreign.CUDA.Solver.Dense.Linear (
 
   Handle,
   Fill(..),
+  Side(..),
   spotrf_bufferSize,
   dpotrf_bufferSize,
   cpotrf_bufferSize,
