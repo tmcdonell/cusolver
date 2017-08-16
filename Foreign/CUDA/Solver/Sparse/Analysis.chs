@@ -44,6 +44,7 @@ newtype Info_csrqr = Info_csrqr { useInfo_csrqr :: {# type csrqrInfo_t #}}
   { useInfo_csrqr `Info_csrqr' } -> `()' checkStatus* #}
 
 
+#if CUDA_VERSION >= 7500
 newtype Info_csrchol = Info_csrchol { useInfo_csrchol :: {# type csrcholInfo_t #}}
 
 {-# INLINEABLE createInfo_csrchol #-}
@@ -55,4 +56,14 @@ newtype Info_csrchol = Info_csrchol { useInfo_csrchol :: {# type csrcholInfo_t #
 {-# INLINEABLE destroyInfo_csrchol #-}
 {# fun unsafe cusolverSpDestroyCsrcholInfo as destroyInfo_csrchol
   { useInfo_csrchol `Info_csrchol' } -> `()' checkStatus* #}
+
+#else
+data Info_csrchol
+
+createInfo_csrchol :: IO Info_csrchol
+createInfo_csrchol = cusolverError "'createInfo_csrchol requires at least cuda-7.5"
+
+destroyInfo_csrchol :: Info_csrchol -> IO ()
+destroyInfo_csrchol _ = cusolverError "'destroyInfo_csrchol requires at least cuda-7.5"
+#endif
 
