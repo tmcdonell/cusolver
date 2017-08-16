@@ -15,10 +15,12 @@ module Foreign.CUDA.Solver.Internal.C2HS (
 
   -- * Composite marshalling functions
   withComplex,
+  peekIntConv, peekFloatConv,
 
 ) where
 
 -- system
+import Control.Monad
 import Data.Complex
 import Foreign
 import Foreign.C
@@ -78,4 +80,14 @@ cFromEnum  = cIntConv . fromEnum
 {-# INLINE withComplex #-}
 withComplex :: Storable a => Complex a -> (Ptr () -> IO b) -> IO b
 withComplex c f = with c (f . castPtr)
+
+-- | Marshalling of numerals
+--
+{-# INLINE peekIntConv #-}
+peekIntConv :: (Storable a, Integral a, Integral b) => Ptr a -> IO b
+peekIntConv = liftM cIntConv . peek
+
+{-# INLINE peekFloatConv #-}
+peekFloatConv :: (Storable a, RealFloat a, RealFloat b) => Ptr a -> IO b
+peekFloatConv = liftM cFloatConv . peek
 

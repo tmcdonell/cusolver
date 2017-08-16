@@ -160,7 +160,6 @@ data Type
   = TVoid
   | THandle
   | TStatus
-  | TData String String String
   | TPtr (Maybe AddrSpace) Type
   | TInt (Maybe Int)  -- ^ signed integer, with optional precision
   | THalf             -- ^ 16-bit floating-point type
@@ -168,6 +167,7 @@ data Type
   | TDouble           -- ^ 64-bit floating-point
   | TComplex Type
   | TEnum String
+  | TPrim String String String
   | TDummy Int        -- ^ Used for extracting the bound variables
   deriving (Eq, Show)
 
@@ -232,9 +232,11 @@ data HType = HType
              deriving Show
 
 mkParamType :: HType -> String
-mkParamType (HType m s _) =
-  if null m then s' else m <> " " <> s'
-  where s' = "`" <> s <> "'"
+mkParamType (HType m s o) = m' <> s' <> o'
+  where
+    m' = if null m then "" else m <> " "
+    o' = if null o then "" else " " <> o
+    s' = "`" <> s <> "'"
 
 mkRetType :: HType -> String
 mkRetType (HType _ s m) =
@@ -303,13 +305,13 @@ convType = \case
                                           TPtr{} -> printf "(%s)" s
                                           _      -> s
   THandle           -> HType "useHandle" "Handle" ""
-  TStatus           -> HType "" "()" "checkStatus*"
-  TData i b o       -> HType i b o
+  TStatus           -> HType "" "()" "checkStatus*-"
+  TPrim i b o       -> HType i b o
   t                 -> error $ "unmarshallable type: " <> show t
   where
     simple s    = HType "" s ""
-    enum s      = HType "cFromEnum" s "cToEnum"
-    floating s  = HType ("C" <> s) s ("fromC" <> s)
+    enum s      = HType "cFromEnum" s ""
+    floating s  = HType ("C" <> s) s ""
     fcomplex s  = HType "withComplex*" s ""
     --
     pointer Nothing s       = HType "castPtr"  ("Ptr " <> s) ""
@@ -362,8 +364,11 @@ side :: Type
 side = TEnum "Side"
 
 matdescr :: Type
-matdescr = TData "useMatDescr" "MatrixDescriptor" ""
+matdescr = TPrim "useMatDescr" "MatrixDescriptor" ""
 
+result :: Type -> Type
+result (TInt ms) = TPrim "alloca-" (maybe "Int" (printf "Int%d") ms) "peekIntConv*"
+result _         = error "unmarshallable output type"
 
 funInsts :: Safety -> [FunGroup] -> [CFun]
 funInsts safety funs = mangleFun safety <$> concatFunInstances funs
@@ -381,28 +386,28 @@ funInsts safety funs = mangleFun safety <$> concatFunInstances funs
 --
 funs_denseLinear :: [FunGroup]
 funs_denseLinear =
-  [ gpA $ \ a   -> dn "?potrf_bufferSize" [ uplo, int, dptr a, int, ptr int32 ]
+  [ gpA $ \ a   -> dn "?potrf_bufferSize" [ uplo, int, dptr a, int, result int ]
   , gpA $ \ a   -> dn "?potrf"            [ uplo, int, dptr a, int, dptr a, int, dptr int32 ]
   , gpA $ \ a   -> dn "?potrs"            [ uplo, int, int, dptr a, int, dptr a, int, dptr int32 ]
-  , gpA $ \ a   -> dn "?getrf_bufferSize" [ int, int, dptr a, int, ptr int32 ]
+  , gpA $ \ a   -> dn "?getrf_bufferSize" [ int, int, dptr a, int, result int ]
   , gpA $ \ a   -> dn "?getrf"            [ int, int, dptr a, int, dptr a, dptr int32, dptr int32 ]
   , gpA $ \ a   -> dn "?getrs"            [ transpose, int, int, dptr a, int, dptr int32, dptr a, int, dptr int32 ]
-  , gpA $ \ a   -> dn "?geqrf_bufferSize" [ int, int, dptr a, int, ptr int32 ]
+  , gpA $ \ a   -> dn "?geqrf_bufferSize" [ int, int, dptr a, int, result int ]
   , gpA $ \ a   -> dn "?geqrf"            [ int, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
   , gpR $ \ a   -> dn "?ormqr"            [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, dptr a, int, dptr int32 ]
   , gpC $ \ a   -> dn "?unmqr"            [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, dptr a, int, dptr int32 ]
-  , gpA $ \ a   -> dn "?sytrf_bufferSize" [ int, dptr a, int, ptr int32 ]
+  , gpA $ \ a   -> dn "?sytrf_bufferSize" [ int, dptr a, int, result int ]
   , gpA $ \ a   -> dn "?sytrf"            [ uplo, int, dptr a, int, dptr int32, dptr a, int, dptr int32 ]
   ]
 
 funs_denseLinear_cuda80 :: [FunGroup]
 funs_denseLinear_cuda80 =
-  [ gpR $ \ a   -> dn "?orgqr_bufferSize" [ int, int, int, dptr a, int, dptr a, ptr int32 ]
-  , gpC $ \ a   -> dn "?ungqr_bufferSize" [ int, int, int, dptr a, int, dptr a, ptr int32 ]
+  [ gpR $ \ a   -> dn "?orgqr_bufferSize" [ int, int, int, dptr a, int, dptr a, result int ]
+  , gpC $ \ a   -> dn "?ungqr_bufferSize" [ int, int, int, dptr a, int, dptr a, result int ]
   , gpR $ \ a   -> dn "?orgqr"            [ int, int, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
   , gpC $ \ a   -> dn "?ungqr"            [ int, int, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
-  , gpR $ \ a   -> dn "?ormqr_bufferSize" [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, ptr int32 ]
-  , gpC $ \ a   -> dn "?unmqr_bufferSize" [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, ptr int32 ]
+  , gpR $ \ a   -> dn "?ormqr_bufferSize" [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, result int ]
+  , gpC $ \ a   -> dn "?unmqr_bufferSize" [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, result int ]
   ]
 
 
