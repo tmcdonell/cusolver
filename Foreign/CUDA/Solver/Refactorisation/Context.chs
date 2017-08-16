@@ -17,13 +17,19 @@ module Foreign.CUDA.Solver.Refactorisation.Context (
   create,
   destroy,
 
+  -- * Analysis
+  setup,
+  analyse,
+
 ) where
 
--- Friends
+-- friends
+import Foreign.CUDA.Ptr
 import Foreign.CUDA.Solver.Error
 import Foreign.CUDA.Solver.Internal.C2HS
 
--- System
+-- system
+import Data.Int
 import Foreign
 import Foreign.C
 import Control.Monad                                      ( liftM )
@@ -60,4 +66,44 @@ newtype Handle = Handle { useHandle :: {# type cusolverRfHandle_t #}}
 {-# INLINEABLE destroy #-}
 {# fun unsafe cusolverRfDestroy as destroy
   { useHandle `Handle' } -> `()' checkStatus* #}
+
+
+-- | Assembles internal data structures required by the cuSolverRF library.
+--
+-- <http://docs.nvidia.com/cuda/cusolver/index.html#glu-lt-t-gt-assemble-device>
+--
+{-# INLINEABLE setup #-}
+{# fun unsafe cusolverRfSetupDevice as setup
+  { `Int'
+  , `Int'
+  , useDevP `DevicePtr Int32'
+  , useDevP `DevicePtr Int32'
+  , useDevP `DevicePtr Double'
+  , `Int'
+  , useDevP `DevicePtr Int32'
+  , useDevP `DevicePtr Int32'
+  , useDevP `DevicePtr Double'
+  , `Int'
+  , useDevP `DevicePtr Int32'
+  , useDevP `DevicePtr Int32'
+  , useDevP `DevicePtr Double'
+  , useDevP `DevicePtr Int32'
+  , useDevP `DevicePtr Int32'
+  , useHandle `Handle'
+  }
+  -> `()' checkStatus*- #}
+  where
+    useDevP = useDevicePtr . castDevPtr
+
+
+-- | Perform the appropriate analysis of parallelism available in the LU
+-- refactorisation depending upon the algorithm chosen by the user. Assumes
+-- a prior call to 'setup' (or 'setupHost') to create internal data structures.
+--
+-- <http://docs.nvidia.com/cuda/cusolver/index.html#glu-lt-t-gt-analyze>
+--
+{-# INLINEABLE analyse #-}
+{# fun unsafe cusolverRfAnalyze as analyse
+  { useHandle `Handle' } -> `()' checkStatus* #}
+
 
