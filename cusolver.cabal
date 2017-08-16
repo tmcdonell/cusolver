@@ -1,6 +1,6 @@
 name:                   cusolver
 version:                0.1.0.0
-synopsis:               FFI bindings to the CUDA Sparse BLAS library
+synopsis:               FFI bindings to CUDA Solver, a LAPACK-like library
 description:
     The cuSolver library provides useful LAPACK-like features implemented on
     NVIDIA GPUs, such as common matrix factorization and triangular solve
