@@ -51,9 +51,12 @@ library
       Foreign.CUDA.Solver.Dense.Eigenvalue
 
       -- Sparse LAPACK-like functions
-      -- Foreign.CUDA.Solver.Sparse
+      Foreign.CUDA.Solver.Sparse
+      Foreign.CUDA.Solver.Sparse.Analysis
       Foreign.CUDA.Solver.Sparse.Context
       Foreign.CUDA.Solver.Sparse.Stream
+      Foreign.CUDA.Solver.Sparse.High
+      Foreign.CUDA.Solver.Sparse.Low
 
       -- Matrix refactorisation
       -- Foreign.CUDA.Solver.Refactorisation
@@ -64,6 +67,10 @@ library
   other-modules:
       Foreign.CUDA.Solver.Internal.C2HS
       Foreign.CUDA.Solver.Internal.Types
+
+      Foreign.CUDA.Solver.Dense.Analysis
+      Foreign.CUDA.Solver.Refactorisation.Analysis
+
 
   build-depends:
       base                              == 4.*

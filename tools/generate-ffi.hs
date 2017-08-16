@@ -39,6 +39,13 @@ main = do
                 , "EigMode(..)"
                 , "EigType(..)"
                 ]
+      s1exp   = [ "Handle"
+                , "MatrixDescriptor"
+                ]
+      s2exp   = [ "Handle"
+                , "MatrixDescriptor"
+                , "Info_csrqr"
+                ]
   --
   mkC2HS "Dense" "Linear" (docs "cuds-linearsolver") d1exp
     [(Nothing,   funs_denseLinear)
@@ -48,6 +55,14 @@ main = do
   mkC2HS "Dense" "Eigenvalue" (docs "cuds-eigensolver") d2exp
     [(Nothing,   funs_denseEigen)
     ,(Just 8000, funs_denseEigen_cuda80)
+    ]
+
+  mkC2HS "Sparse" "High" (docs "cusolver-high-level-function") s1exp
+    [(Nothing,   funs_sparseHigh)
+    ]
+
+  mkC2HS "Sparse" "Low" (docs "cusolver-low-level-function") s2exp
+    [(Nothing,   funs_sparseLow)
     ]
 
 mkC2HS :: String -> String -> [String] -> [String] -> [(Maybe Int, [FunGroup])] -> IO ()
@@ -63,6 +78,7 @@ mkC2HS grp mdl docs exps funs =
                 , "Foreign.Storable.Complex ()"
                 , "Foreign.CUDA.Ptr"
                 , "Foreign.CUDA.Solver." ++ grp ++ ".Context"
+                , "Foreign.CUDA.Solver." ++ grp ++ ".Analysis"
                 , "Foreign.CUDA.Solver.Error"
                 , "Foreign.CUDA.Solver.Internal.C2HS"
                 , "Foreign.CUDA.Solver.Internal.Types"
@@ -372,6 +388,10 @@ double = TDouble
 complex :: Type -> Type
 complex = TComplex
 
+plain :: Type -> Type
+plain (TComplex a) = a
+plain a            = a
+
 transpose :: Type
 transpose = TEnum "Operation"
 
@@ -389,6 +409,12 @@ eigtype = TEnum "EigType"
 
 matdescr :: Type
 matdescr = TPrim "useMatDescr" "MatrixDescriptor" ""
+
+mkInfo :: String -> Type
+mkInfo t = TPrim ("useInfo_" <> t) ("Info_" <> t) ""
+
+info_csrqr :: Type
+info_csrqr = mkInfo "csrqr"
 
 result :: Type -> Type
 result (TInt ms) = TPrim "alloca-" (maybe "Int" (printf "Int%d") ms) "peekIntConv*"
@@ -473,6 +499,30 @@ funs_denseEigen_cuda80 =
   , gpC $ \ a   -> dn "?hegvd_bufferSize" [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, result int ]
   , gpR $ \ a   -> dn "?sygvd"            [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
   , gpC $ \ a   -> dn "?hegvd"            [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
+  ]
+
+
+-- | Sparse LAPACK function reference
+--
+-- <http://docs.nvidia.com/cuda/cusolver/index.html#cusolver-function-reference>
+--
+funs_sparseHigh :: [FunGroup]
+funs_sparseHigh =
+  [ gpA $ \ a   -> sp "?csrlsvqr"   [ int, int, matdescr, dptr a, dptr int32, dptr int32, dptr a, plain a, int, dptr a, result int ]
+  , gpA $ \ a   -> sp "?csrlsvchol" [ int, int, matdescr, dptr a, dptr int32, dptr int32, dptr a, plain a, int, dptr a, result int ]
+  , gpA $ \ a   -> sp "?csreigvsi"  [ int, int, matdescr, dptr a, dptr int32, dptr int32, a, dptr a, int, plain a, dptr a, dptr a ]
+
+  -- These functions currently only implemented on the host
+  -- , gpA $ \ a   -> sp "?csrlsvlu"   [  ]
+  -- , gpA $ \ a   -> sp "?csrlsqvqr"  [  ]
+  -- , gpA $ \ a   -> sp "?csreigs"    [  ]
+  ]
+
+funs_sparseLow :: [FunGroup]
+funs_sparseLow =
+  [ gp  $          sp "xcsrqrAnalysisBatched"   [ int, int, int, matdescr, dptr int32, dptr int32, info_csrqr ]
+  , gpA $ \ a   -> sp "?csrqrBufferInfoBatched" [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_csrqr, result int, result int ]
+  , gpA $ \ a   -> sp "?csrqrsvBatched"         [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, dptr a, dptr a, int, info_csrqr, dptr void ]
   ]
 
 

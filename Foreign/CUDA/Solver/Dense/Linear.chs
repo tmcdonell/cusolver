@@ -90,6 +90,7 @@ import Foreign.C
 import Foreign.Storable.Complex ()
 import Foreign.CUDA.Ptr
 import Foreign.CUDA.Solver.Dense.Context
+import Foreign.CUDA.Solver.Dense.Analysis
 import Foreign.CUDA.Solver.Error
 import Foreign.CUDA.Solver.Internal.C2HS
 import Foreign.CUDA.Solver.Internal.Types
