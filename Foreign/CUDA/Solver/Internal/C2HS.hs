@@ -16,15 +16,9 @@ module Foreign.CUDA.Solver.Internal.C2HS (
   -- * Composite marshalling functions
   withComplex,
 
-  -- * Utilities
-  checkStatus
-
 ) where
 
--- Friends
-import Foreign.CUDA.Solver.Error
-
--- System
+-- system
 import Data.Complex
 import Foreign
 import Foreign.C
@@ -84,11 +78,4 @@ cFromEnum  = cIntConv . fromEnum
 {-# INLINE withComplex #-}
 withComplex :: Storable a => Complex a -> (Ptr () -> IO b) -> IO b
 withComplex c f = with c (f . castPtr)
-
-
--- | Throw an error if given error code is not CUSPARSE_STATUS_SUCCESS
---
-{-# INLINE checkStatus #-}
-checkStatus :: CInt -> IO ()
-checkStatus = nothingIfOk . cToEnum
 
