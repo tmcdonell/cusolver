@@ -14,6 +14,7 @@
 #include <cuda.h>
 #include <cusolverDn.h>
 #include <cusolverSp.h>
+#include <cusolverSp_LOWLEVEL_PREVIEW.h>
 #include <cusolverRf.h>
 #include <cusolver_common.h>
 

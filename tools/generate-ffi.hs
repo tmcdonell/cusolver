@@ -45,6 +45,7 @@ main = do
       s2exp   = [ "Handle"
                 , "MatrixDescriptor"
                 , "Info_csrqr"
+                , "Info_csrchol"
                 ]
   --
   mkC2HS "Dense" "Linear" (docs "cuds-linearsolver") d1exp
@@ -63,6 +64,7 @@ main = do
 
   mkC2HS "Sparse" "Low" (docs "cusolver-low-level-function") s2exp
     [(Nothing,   funs_sparseLow)
+    ,(Just 7500, funs_sparseLowEx)
     ]
 
 mkC2HS :: String -> String -> [String] -> [String] -> [(Maybe Int, [FunGroup])] -> IO ()
@@ -416,6 +418,9 @@ mkInfo t = TPrim ("useInfo_" <> t) ("Info_" <> t) ""
 info_csrqr :: Type
 info_csrqr = mkInfo "csrqr"
 
+info_csrchol :: Type
+info_csrchol = mkInfo "csrchol"
+
 result :: Type -> Type
 result (TInt ms) = TPrim "alloca-" (maybe "Int" (printf "Int%d") ms) "peekIntConv*"
 result _         = error "unmarshallable output type"
@@ -523,6 +528,31 @@ funs_sparseLow =
   [ gp  $          sp "xcsrqrAnalysisBatched"   [ int, int, int, matdescr, dptr int32, dptr int32, info_csrqr ]
   , gpA $ \ a   -> sp "?csrqrBufferInfoBatched" [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, int, info_csrqr, result int, result int ]
   , gpA $ \ a   -> sp "?csrqrsvBatched"         [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, dptr a, dptr a, int, info_csrqr, dptr void ]
+
+  -- These functions currently only implemented on the host
+  -- , gp  $          sp "xcsrsymrcm"
+  -- , gp  $          sp "xcsrsymmdq"
+  -- , gp  $          sp "xcsrsymamd"
+  -- , gp  $          sp "xcsrperm_bufferSize"
+  -- , gp  $          sp "xcsrperm"
+  ]
+
+funs_sparseLowEx :: [FunGroup]
+funs_sparseLowEx =
+  [ gp  $          sp "xcsrqrAnalysis"      [ int, int, int, matdescr, dptr int32, dptr int32, info_csrqr ]
+  , gpA $ \ a   -> sp "?csrqrBufferInfo"    [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, info_csrqr, result int, result int ]
+  , gpA $ \ a   -> sp "?csrqrSetup"         [ int, int, int, matdescr, dptr a, dptr int32, dptr int32, a, info_csrqr ]
+  , gpA $ \ a   -> sp "?csrqrFactor"        [ int, int, int, dptr a, dptr a, info_csrqr, dptr void ]
+  , gpA $ \ a   -> sp "?csrqrZeroPivot"     [ info_csrqr, plain a, result int ]
+  , gpA $ \ a   -> sp "?csrqrSolve"         [ int, int, dptr a, dptr a, info_csrqr, dptr void ]
+  , gp  $          sp "xcsrcholAnalysis"    [ int, int, matdescr, dptr int32, dptr int32, info_csrchol ]
+  , gpA $ \ a   -> sp "?csrcholBufferInfo"  [ int, int, matdescr, dptr a, dptr int32, dptr int32, info_csrchol, result int, result int ]
+  , gpA $ \ a   -> sp "?csrcholFactor"      [ int, int, matdescr, dptr a, dptr int32, dptr int32, info_csrchol, dptr void ]
+  , gpA $ \ a   -> sp "?csrcholZeroPivot"   [ info_csrchol, plain a, result int ]
+  , gpA $ \ a   -> sp "?csrcholSolve"       [ int, dptr a, dptr a, info_csrchol, dptr void ]
+
+  -- These functions currently only implemented on the host
+  -- xcsrlu
   ]
 
 

@@ -14,6 +14,7 @@
 module Foreign.CUDA.Solver.Sparse.Analysis (
 
   Info_csrqr(..), createInfo_csrqr, destroyInfo_csrqr,
+  Info_csrchol(..), createInfo_csrchol, destroyInfo_csrchol,
 
 ) where
 
@@ -41,4 +42,17 @@ newtype Info_csrqr = Info_csrqr { useInfo_csrqr :: {# type csrqrInfo_t #}}
 {-# INLINEABLE destroyInfo_csrqr #-}
 {# fun unsafe cusolverSpDestroyCsrqrInfo as destroyInfo_csrqr
   { useInfo_csrqr `Info_csrqr' } -> `()' checkStatus* #}
+
+
+newtype Info_csrchol = Info_csrchol { useInfo_csrchol :: {# type csrcholInfo_t #}}
+
+{-# INLINEABLE createInfo_csrchol #-}
+{# fun unsafe cusolverSpCreateCsrcholInfo as createInfo_csrchol
+  { alloca- `Info_csrchol' peekI* } -> `()' checkStatus*- #}
+  where
+    peekI = liftM Info_csrchol . peek
+
+{-# INLINEABLE destroyInfo_csrchol #-}
+{# fun unsafe cusolverSpDestroyCsrcholInfo as destroyInfo_csrchol
+  { useInfo_csrchol `Info_csrchol' } -> `()' checkStatus* #}
 
