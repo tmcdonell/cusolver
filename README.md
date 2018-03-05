@@ -1,7 +1,10 @@
 Haskell FFI Bindings to cuSolver
 ================================
 
-[![Build status](https://travis-ci.org/tmcdonell/cusolver.svg?branch=master)](https://travis-ci.org/tmcdonell/cusolver)
+[![Travis build status](https://img.shields.io/travis/tmcdonell/cusolver/master.svg?label=linux)](https://travis-ci.org/tmcdonell/cusolver)
+[![AppVeyor build status](https://img.shields.io/appveyor/ci/tmcdonell/cusolver/master.svg?label=windows)](https://ci.appveyor.com/project/tmcdonell/cusolver)
+[![Stackage LTS](https://stackage.org/package/cusolver/badge/lts)](https://stackage.org/lts/package/cusolver)
+[![Stackage Nightly](https://stackage.org/package/cusolver/badge/nightly)](https://stackage.org/nightly/package/cusolver)
 [![Hackage](https://img.shields.io/hackage/v/cusolver.svg)](https://hackage.haskell.org/package/cusolver)
 
 The cuSolver library provides useful LAPACK-like features implemented on NVIDIA
