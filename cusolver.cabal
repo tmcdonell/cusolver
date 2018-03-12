@@ -1,5 +1,5 @@
 name:                   cusolver
-version:                0.1.0.0
+version:                0.1.0.1
 synopsis:               FFI bindings to CUDA Solver, a LAPACK-like library
 description:
     The cuSolver library provides useful LAPACK-like features implemented on
@@ -96,6 +96,6 @@ source-repository head
 source-repository this
     type:               git
     location:           https://github.com/tmcdonell/cusolver
-    tag:                0.1.0.0
+    tag:                0.1.0.1
 
 -- vim: nospell
