@@ -20,7 +20,7 @@ author:                 Trevor L. McDonell
 maintainer:             Trevor L. McDonell <tmcdonell@cse.unsw.edu.au>
 copyright:              Copyright (c) [2017]. Trevor L. McDonell <tmcdonell@cse.unsw.edu.au>
 category:               Foreign
-cabal-version:          >=1.8
+cabal-version:          >=1.24
 
 build-type:             Custom
 extra-tmp-files:        cusolver.buildinfo.generated
@@ -32,7 +32,7 @@ extra-source-files:
 custom-setup
   setup-depends:
       base              >= 4.6
-    , Cabal             >= 1.22
+    , Cabal             >= 1.24
     , cuda              >= 0.8
     , directory         >= 1.0
     , filepath          >= 1.0
