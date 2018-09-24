@@ -16,9 +16,9 @@ description:
 
 license:                BSD3
 license-file:           LICENSE
-author:                 Trevor L. McDonell
-maintainer:             Trevor L. McDonell <tmcdonell@cse.unsw.edu.au>
-copyright:              Copyright (c) [2017]. Trevor L. McDonell <tmcdonell@cse.unsw.edu.au>
+author:                 Trevor L. McDonell <trevor.mcdonell@gmail.com>
+maintainer:             Trevor L. McDonell <trevor.mcdonell@gmail.com>
+copyright:              Copyright (c) [2017]. Trevor L. McDonell <trevor.mcdonell@gmail.com>
 category:               Foreign
 cabal-version:          >=1.24
 
