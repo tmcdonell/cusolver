@@ -581,7 +581,13 @@ funs_sparseLowEx =
   , gpA $ \ a   -> sp "?csrcholSolve"       [ int, dptr a, dptr a, info_csrchol, dptr void ]
 
   -- These functions currently only implemented on the host
-  -- xcsrlu
+  --
+  -- from cuda-7.5 preview section
+  -- , gp  $             "xcsrlu*"
+  --
+  -- from CUDA-9.2
+  -- , gp  $          sp "xcsrmetisnd"
+  -- , gA  $ \ a   -> sp "?csrzfd"
   ]
 
 
