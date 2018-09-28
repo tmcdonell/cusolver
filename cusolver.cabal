@@ -78,6 +78,7 @@ library
     , cusparse                          >= 0.1
     , half                              >= 0.1
     , storable-complex                  >= 0.2
+    , template-haskell
 
   build-tools:
       c2hs                              >= 0.16
