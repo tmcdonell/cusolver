@@ -38,6 +38,8 @@ main = do
                 , "Operation(..)"
                 , "EigMode(..)"
                 , "EigType(..)"
+                , "Info_gesvdj"
+                , "Info_syevj"
                 ]
       s1exp   = [ "Handle"
                 , "MatrixDescriptor"
@@ -56,6 +58,7 @@ main = do
   mkC2HS "Dense" "Eigenvalue" (docs "cuds-eigensolver") d2exp
     [(Nothing,   funs_denseEigen)
     ,(Just 8000, funs_denseEigen_cuda80)
+    ,(Just 9000, funs_denseEigen_cuda90)
     ]
 
   mkC2HS "Sparse" "High" (docs "cusolver-high-level-function") s1exp
@@ -421,6 +424,12 @@ info_csrqr = mkInfo "csrqr"
 info_csrchol :: Type
 info_csrchol = mkInfo "csrchol"
 
+info_gesvdj :: Type
+info_gesvdj = mkInfo "gesvdj"
+
+info_syevj :: Type
+info_syevj = mkInfo "syevj"
+
 result :: Type -> Type
 result (TInt ms) = TPrim "alloca-" (maybe "Int" (printf "Int%d") ms) "peekIntConv*"
 result _         = error "unmarshallable output type"
@@ -504,6 +513,26 @@ funs_denseEigen_cuda80 =
   , gpC $ \ a   -> dn "?hegvd_bufferSize" [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, result int ]
   , gpR $ \ a   -> dn "?sygvd"            [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
   , gpC $ \ a   -> dn "?hegvd"            [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
+  ]
+
+funs_denseEigen_cuda90 :: [FunGroup]
+funs_denseEigen_cuda90 =
+  [ gpA $ \ a   -> dn "?gesvdj_bufferSize"        [ eigmode, int, int, int, dptr a, int, dptr a, dptr a, int, dptr a, int, result int, info_gesvdj ]
+  , gpA $ \ a   -> dn "?gesvdj"                   [ eigmode, int, int, int, dptr a, int, dptr a, dptr a, int, dptr a, int, dptr a, int, dptr int32, info_gesvdj ]
+  , gpA $ \ a   -> dn "?gesvdjBatched_bufferSize" [ eigmode, int, int, dptr a, int, dptr a, dptr a, int, dptr a, int, result int, info_gesvdj, int ]
+  , gpA $ \ a   -> dn "?gesvdjBatched"            [ eigmode, int, int, dptr a, int, dptr a, dptr a, int, dptr a, int, dptr a, int, dptr int32, info_gesvdj, int ]
+  , gpR $ \ a   -> dn "?syevj_bufferSize"         [ eigmode, uplo, int, dptr a, int, dptr a, result int, info_syevj ]
+  , gpR $ \ a   -> dn "?syevj"                    [ eigmode, uplo, int, dptr a, int, dptr a, dptr a, int, dptr int32, info_syevj ]
+  , gpC $ \ a   -> dn "?heevj_bufferSize"         [ eigmode, uplo, int, dptr a, int, dptr a, result int, info_syevj ]
+  , gpC $ \ a   -> dn "?heevj"                    [ eigmode, uplo, int, dptr a, int, dptr a, dptr a, int, dptr int32, info_syevj ]
+  , gpR $ \ a   -> dn "?syevjBatched_bufferSize"  [ eigmode, uplo, int, dptr a, int, dptr a, result int, info_syevj, int ]
+  , gpR $ \ a   -> dn "?syevjBatched"             [ eigmode, uplo, int, dptr a, int, dptr a, dptr a, int, dptr int32, info_syevj, int ]
+  , gpC $ \ a   -> dn "?heevjBatched_bufferSize"  [ eigmode, uplo, int, dptr a, int, dptr a, result int, info_syevj, int ]
+  , gpC $ \ a   -> dn "?heevjBatched"             [ eigmode, uplo, int, dptr a, int, dptr a, dptr a, int, dptr int32, info_syevj, int ]
+  , gpR $ \ a   -> dn "?sygvj_bufferSize"         [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, result int, info_syevj ]
+  , gpR $ \ a   -> dn "?sygvj"                    [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, dptr a, int, dptr int32, info_syevj ]
+  , gpC $ \ a   -> dn "?hegvj_bufferSize"         [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, result int, info_syevj ]
+  , gpC $ \ a   -> dn "?hegvj"                    [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, dptr a, int, dptr int32, info_syevj ]
   ]
 
 
