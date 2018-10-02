@@ -21,6 +21,8 @@ import Foreign.CUDA.Solver.Internal.C2HS
 import Control.Exception
 import Data.Typeable
 import Foreign.C.Types
+import Language.Haskell.TH
+import Text.Printf
 
 #include "cbits/stubs.h"
 {# context lib="cusolver" #}
@@ -69,6 +71,12 @@ instance Show CUSolverException where
 --
 cusolverError :: String -> IO a
 cusolverError s = throwIO (UserError s)
+
+-- |
+-- A specially formatted error message
+--
+requireSDK :: Name -> Double -> IO a
+requireSDK n v = cusolverError $ printf "'%s' requires at least cuda-%3.1f\n" (show n) v
 
 
 -- | Return the results of a function on successful execution, otherwise throw

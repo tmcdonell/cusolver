@@ -28,6 +28,8 @@ module Foreign.CUDA.Solver.Dense.Eigenvalue (
   Operation(..),
   EigMode(..),
   EigType(..),
+  Info_gesvdj,
+  Info_syevj,
   sgebrd_bufferSize,
   dgebrd_bufferSize,
   cgebrd_bufferSize,
@@ -92,6 +94,46 @@ module Foreign.CUDA.Solver.Dense.Eigenvalue (
   dsygvd,
   chegvd,
   zhegvd,
+  sgesvdj_bufferSize,
+  dgesvdj_bufferSize,
+  cgesvdj_bufferSize,
+  zgesvdj_bufferSize,
+  sgesvdj,
+  dgesvdj,
+  cgesvdj,
+  zgesvdj,
+  sgesvdjBatched_bufferSize,
+  dgesvdjBatched_bufferSize,
+  cgesvdjBatched_bufferSize,
+  zgesvdjBatched_bufferSize,
+  sgesvdjBatched,
+  dgesvdjBatched,
+  cgesvdjBatched,
+  zgesvdjBatched,
+  ssyevj_bufferSize,
+  dsyevj_bufferSize,
+  ssyevj,
+  dsyevj,
+  cheevj_bufferSize,
+  zheevj_bufferSize,
+  cheevj,
+  zheevj,
+  ssyevjBatched_bufferSize,
+  dsyevjBatched_bufferSize,
+  ssyevjBatched,
+  dsyevjBatched,
+  cheevjBatched_bufferSize,
+  zheevjBatched_bufferSize,
+  cheevjBatched,
+  zheevjBatched,
+  ssygvj_bufferSize,
+  dsygvj_bufferSize,
+  ssygvj,
+  dsygvj,
+  chegvj_bufferSize,
+  zhegvj_bufferSize,
+  chegvj,
+  zhegvj,
 
 ) where
 
@@ -455,4 +497,247 @@ chegvd _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'chegvd' requires at least cud
 
 zhegvd :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> IO ()
 zhegvd _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zhegvd' requires at least cuda-8.0"
+#endif
+#if CUDA_VERSION >= 9000
+
+{-# INLINEABLE sgesvdj_bufferSize #-}
+{# fun unsafe cusolverDnSgesvdj_bufferSize as sgesvdj_bufferSize { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', alloca- `Int' peekIntConv*, useInfo_gesvdj `Info_gesvdj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dgesvdj_bufferSize #-}
+{# fun unsafe cusolverDnDgesvdj_bufferSize as dgesvdj_bufferSize { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', alloca- `Int' peekIntConv*, useInfo_gesvdj `Info_gesvdj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cgesvdj_bufferSize #-}
+{# fun unsafe cusolverDnCgesvdj_bufferSize as cgesvdj_bufferSize { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', alloca- `Int' peekIntConv*, useInfo_gesvdj `Info_gesvdj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zgesvdj_bufferSize #-}
+{# fun unsafe cusolverDnZgesvdj_bufferSize as zgesvdj_bufferSize { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', alloca- `Int' peekIntConv*, useInfo_gesvdj `Info_gesvdj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE sgesvdj #-}
+{# fun unsafe cusolverDnSgesvdj as sgesvdj { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Int32', useInfo_gesvdj `Info_gesvdj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dgesvdj #-}
+{# fun unsafe cusolverDnDgesvdj as dgesvdj { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Int32', useInfo_gesvdj `Info_gesvdj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cgesvdj #-}
+{# fun unsafe cusolverDnCgesvdj as cgesvdj { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr Int32', useInfo_gesvdj `Info_gesvdj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zgesvdj #-}
+{# fun unsafe cusolverDnZgesvdj as zgesvdj { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32', useInfo_gesvdj `Info_gesvdj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE sgesvdjBatched_bufferSize #-}
+{# fun unsafe cusolverDnSgesvdjBatched_bufferSize as sgesvdjBatched_bufferSize { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', alloca- `Int' peekIntConv*, useInfo_gesvdj `Info_gesvdj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dgesvdjBatched_bufferSize #-}
+{# fun unsafe cusolverDnDgesvdjBatched_bufferSize as dgesvdjBatched_bufferSize { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', alloca- `Int' peekIntConv*, useInfo_gesvdj `Info_gesvdj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cgesvdjBatched_bufferSize #-}
+{# fun unsafe cusolverDnCgesvdjBatched_bufferSize as cgesvdjBatched_bufferSize { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', alloca- `Int' peekIntConv*, useInfo_gesvdj `Info_gesvdj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zgesvdjBatched_bufferSize #-}
+{# fun unsafe cusolverDnZgesvdjBatched_bufferSize as zgesvdjBatched_bufferSize { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', alloca- `Int' peekIntConv*, useInfo_gesvdj `Info_gesvdj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE sgesvdjBatched #-}
+{# fun unsafe cusolverDnSgesvdjBatched as sgesvdjBatched { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Int32', useInfo_gesvdj `Info_gesvdj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dgesvdjBatched #-}
+{# fun unsafe cusolverDnDgesvdjBatched as dgesvdjBatched { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Int32', useInfo_gesvdj `Info_gesvdj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cgesvdjBatched #-}
+{# fun unsafe cusolverDnCgesvdjBatched as cgesvdjBatched { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr Int32', useInfo_gesvdj `Info_gesvdj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zgesvdjBatched #-}
+{# fun unsafe cusolverDnZgesvdjBatched as zgesvdjBatched { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32', useInfo_gesvdj `Info_gesvdj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE ssyevj_bufferSize #-}
+{# fun unsafe cusolverDnSsyevj_bufferSize as ssyevj_bufferSize { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', alloca- `Int' peekIntConv*, useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dsyevj_bufferSize #-}
+{# fun unsafe cusolverDnDsyevj_bufferSize as dsyevj_bufferSize { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', alloca- `Int' peekIntConv*, useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE ssyevj #-}
+{# fun unsafe cusolverDnSsyevj as ssyevj { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Int32', useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dsyevj #-}
+{# fun unsafe cusolverDnDsyevj as dsyevj { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Int32', useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cheevj_bufferSize #-}
+{# fun unsafe cusolverDnCheevj_bufferSize as cheevj_bufferSize { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', alloca- `Int' peekIntConv*, useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zheevj_bufferSize #-}
+{# fun unsafe cusolverDnZheevj_bufferSize as zheevj_bufferSize { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', alloca- `Int' peekIntConv*, useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cheevj #-}
+{# fun unsafe cusolverDnCheevj as cheevj { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr Int32', useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zheevj #-}
+{# fun unsafe cusolverDnZheevj as zheevj { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32', useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE ssyevjBatched_bufferSize #-}
+{# fun unsafe cusolverDnSsyevjBatched_bufferSize as ssyevjBatched_bufferSize { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', alloca- `Int' peekIntConv*, useInfo_syevj `Info_syevj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dsyevjBatched_bufferSize #-}
+{# fun unsafe cusolverDnDsyevjBatched_bufferSize as dsyevjBatched_bufferSize { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', alloca- `Int' peekIntConv*, useInfo_syevj `Info_syevj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE ssyevjBatched #-}
+{# fun unsafe cusolverDnSsyevjBatched as ssyevjBatched { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Int32', useInfo_syevj `Info_syevj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dsyevjBatched #-}
+{# fun unsafe cusolverDnDsyevjBatched as dsyevjBatched { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Int32', useInfo_syevj `Info_syevj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cheevjBatched_bufferSize #-}
+{# fun unsafe cusolverDnCheevjBatched_bufferSize as cheevjBatched_bufferSize { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', alloca- `Int' peekIntConv*, useInfo_syevj `Info_syevj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zheevjBatched_bufferSize #-}
+{# fun unsafe cusolverDnZheevjBatched_bufferSize as zheevjBatched_bufferSize { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', alloca- `Int' peekIntConv*, useInfo_syevj `Info_syevj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cheevjBatched #-}
+{# fun unsafe cusolverDnCheevjBatched as cheevjBatched { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr Int32', useInfo_syevj `Info_syevj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zheevjBatched #-}
+{# fun unsafe cusolverDnZheevjBatched as zheevjBatched { useHandle `Handle', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32', useInfo_syevj `Info_syevj', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE ssygvj_bufferSize #-}
+{# fun unsafe cusolverDnSsygvj_bufferSize as ssygvj_bufferSize { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', alloca- `Int' peekIntConv*, useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dsygvj_bufferSize #-}
+{# fun unsafe cusolverDnDsygvj_bufferSize as dsygvj_bufferSize { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', alloca- `Int' peekIntConv*, useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE ssygvj #-}
+{# fun unsafe cusolverDnSsygvj as ssygvj { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Int32', useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dsygvj #-}
+{# fun unsafe cusolverDnDsygvj as dsygvj { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Int32', useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE chegvj_bufferSize #-}
+{# fun unsafe cusolverDnChegvj_bufferSize as chegvj_bufferSize { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', alloca- `Int' peekIntConv*, useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zhegvj_bufferSize #-}
+{# fun unsafe cusolverDnZhegvj_bufferSize as zhegvj_bufferSize { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', alloca- `Int' peekIntConv*, useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE chegvj #-}
+{# fun unsafe cusolverDnChegvj as chegvj { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr Int32', useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zhegvj #-}
+{# fun unsafe cusolverDnZhegvj as zhegvj { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32', useInfo_syevj `Info_syevj' } -> `()' checkStatus*- #}
+#else
+
+sgesvdj_bufferSize :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> Int -> Info_gesvdj -> IO ()
+sgesvdj_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'sgesvdj_bufferSize' requires at least cuda-9.0"
+
+dgesvdj_bufferSize :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> Int -> Info_gesvdj -> IO ()
+dgesvdj_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dgesvdj_bufferSize' requires at least cuda-9.0"
+
+cgesvdj_bufferSize :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> Int -> Info_gesvdj -> IO ()
+cgesvdj_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cgesvdj_bufferSize' requires at least cuda-9.0"
+
+zgesvdj_bufferSize :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> Int -> Info_gesvdj -> IO ()
+zgesvdj_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zgesvdj_bufferSize' requires at least cuda-9.0"
+
+sgesvdj :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> DevicePtr Int32 -> Info_gesvdj -> IO ()
+sgesvdj _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'sgesvdj' requires at least cuda-9.0"
+
+dgesvdj :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> DevicePtr Int32 -> Info_gesvdj -> IO ()
+dgesvdj _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dgesvdj' requires at least cuda-9.0"
+
+cgesvdj :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> Info_gesvdj -> IO ()
+cgesvdj _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cgesvdj' requires at least cuda-9.0"
+
+zgesvdj :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> Info_gesvdj -> IO ()
+zgesvdj _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zgesvdj' requires at least cuda-9.0"
+
+sgesvdjBatched_bufferSize :: Handle -> EigMode -> Int -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> Int -> Info_gesvdj -> Int -> IO ()
+sgesvdjBatched_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'sgesvdjBatched_bufferSize' requires at least cuda-9.0"
+
+dgesvdjBatched_bufferSize :: Handle -> EigMode -> Int -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> Int -> Info_gesvdj -> Int -> IO ()
+dgesvdjBatched_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dgesvdjBatched_bufferSize' requires at least cuda-9.0"
+
+cgesvdjBatched_bufferSize :: Handle -> EigMode -> Int -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> Int -> Info_gesvdj -> Int -> IO ()
+cgesvdjBatched_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cgesvdjBatched_bufferSize' requires at least cuda-9.0"
+
+zgesvdjBatched_bufferSize :: Handle -> EigMode -> Int -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> Int -> Info_gesvdj -> Int -> IO ()
+zgesvdjBatched_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zgesvdjBatched_bufferSize' requires at least cuda-9.0"
+
+sgesvdjBatched :: Handle -> EigMode -> Int -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> DevicePtr Int32 -> Info_gesvdj -> Int -> IO ()
+sgesvdjBatched _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'sgesvdjBatched' requires at least cuda-9.0"
+
+dgesvdjBatched :: Handle -> EigMode -> Int -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> DevicePtr Int32 -> Info_gesvdj -> Int -> IO ()
+dgesvdjBatched _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dgesvdjBatched' requires at least cuda-9.0"
+
+cgesvdjBatched :: Handle -> EigMode -> Int -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> Info_gesvdj -> Int -> IO ()
+cgesvdjBatched _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cgesvdjBatched' requires at least cuda-9.0"
+
+zgesvdjBatched :: Handle -> EigMode -> Int -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> Info_gesvdj -> Int -> IO ()
+zgesvdjBatched _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zgesvdjBatched' requires at least cuda-9.0"
+
+ssyevj_bufferSize :: Handle -> EigMode -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> Info_syevj -> IO ()
+ssyevj_bufferSize _ _ _ _ _ _ _ _ _ = cusolverError "'ssyevj_bufferSize' requires at least cuda-9.0"
+
+dsyevj_bufferSize :: Handle -> EigMode -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> Info_syevj -> IO ()
+dsyevj_bufferSize _ _ _ _ _ _ _ _ _ = cusolverError "'dsyevj_bufferSize' requires at least cuda-9.0"
+
+ssyevj :: Handle -> EigMode -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Int32 -> Info_syevj -> IO ()
+ssyevj _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'ssyevj' requires at least cuda-9.0"
+
+dsyevj :: Handle -> EigMode -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Int32 -> Info_syevj -> IO ()
+dsyevj _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dsyevj' requires at least cuda-9.0"
+
+cheevj_bufferSize :: Handle -> EigMode -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> Info_syevj -> IO ()
+cheevj_bufferSize _ _ _ _ _ _ _ _ _ = cusolverError "'cheevj_bufferSize' requires at least cuda-9.0"
+
+zheevj_bufferSize :: Handle -> EigMode -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> Info_syevj -> IO ()
+zheevj_bufferSize _ _ _ _ _ _ _ _ _ = cusolverError "'zheevj_bufferSize' requires at least cuda-9.0"
+
+cheevj :: Handle -> EigMode -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> Info_syevj -> IO ()
+cheevj _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cheevj' requires at least cuda-9.0"
+
+zheevj :: Handle -> EigMode -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> Info_syevj -> IO ()
+zheevj _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zheevj' requires at least cuda-9.0"
+
+ssyevjBatched_bufferSize :: Handle -> EigMode -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> Info_syevj -> Int -> IO ()
+ssyevjBatched_bufferSize _ _ _ _ _ _ _ _ _ _ = cusolverError "'ssyevjBatched_bufferSize' requires at least cuda-9.0"
+
+dsyevjBatched_bufferSize :: Handle -> EigMode -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> Info_syevj -> Int -> IO ()
+dsyevjBatched_bufferSize _ _ _ _ _ _ _ _ _ _ = cusolverError "'dsyevjBatched_bufferSize' requires at least cuda-9.0"
+
+ssyevjBatched :: Handle -> EigMode -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Int32 -> Info_syevj -> Int -> IO ()
+ssyevjBatched _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'ssyevjBatched' requires at least cuda-9.0"
+
+dsyevjBatched :: Handle -> EigMode -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Int32 -> Info_syevj -> Int -> IO ()
+dsyevjBatched _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dsyevjBatched' requires at least cuda-9.0"
+
+cheevjBatched_bufferSize :: Handle -> EigMode -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> Info_syevj -> Int -> IO ()
+cheevjBatched_bufferSize _ _ _ _ _ _ _ _ _ _ = cusolverError "'cheevjBatched_bufferSize' requires at least cuda-9.0"
+
+zheevjBatched_bufferSize :: Handle -> EigMode -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> Info_syevj -> Int -> IO ()
+zheevjBatched_bufferSize _ _ _ _ _ _ _ _ _ _ = cusolverError "'zheevjBatched_bufferSize' requires at least cuda-9.0"
+
+cheevjBatched :: Handle -> EigMode -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> Info_syevj -> Int -> IO ()
+cheevjBatched _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cheevjBatched' requires at least cuda-9.0"
+
+zheevjBatched :: Handle -> EigMode -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> Info_syevj -> Int -> IO ()
+zheevjBatched _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zheevjBatched' requires at least cuda-9.0"
+
+ssygvj_bufferSize :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> Info_syevj -> IO ()
+ssygvj_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'ssygvj_bufferSize' requires at least cuda-9.0"
+
+dsygvj_bufferSize :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> Info_syevj -> IO ()
+dsygvj_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dsygvj_bufferSize' requires at least cuda-9.0"
+
+ssygvj :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Int32 -> Info_syevj -> IO ()
+ssygvj _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'ssygvj' requires at least cuda-9.0"
+
+dsygvj :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Int32 -> Info_syevj -> IO ()
+dsygvj _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dsygvj' requires at least cuda-9.0"
+
+chegvj_bufferSize :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> Info_syevj -> IO ()
+chegvj_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'chegvj_bufferSize' requires at least cuda-9.0"
+
+zhegvj_bufferSize :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> Info_syevj -> IO ()
+zhegvj_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zhegvj_bufferSize' requires at least cuda-9.0"
+
+chegvj :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> Info_syevj -> IO ()
+chegvj _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'chegvj' requires at least cuda-9.0"
+
+zhegvj :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> Info_syevj -> IO ()
+zhegvj _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zhegvj' requires at least cuda-9.0"
 #endif

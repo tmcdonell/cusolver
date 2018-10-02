@@ -1,5 +1,5 @@
 name:                   cusolver
-version:                0.1.0.1
+version:                0.2.0.0
 synopsis:               FFI bindings to CUDA Solver, a LAPACK-like library
 description:
     The cuSolver library provides useful LAPACK-like features implemented on
@@ -16,9 +16,9 @@ description:
 
 license:                BSD3
 license-file:           LICENSE
-author:                 Trevor L. McDonell
-maintainer:             Trevor L. McDonell <tmcdonell@cse.unsw.edu.au>
-copyright:              Copyright (c) [2017]. Trevor L. McDonell <tmcdonell@cse.unsw.edu.au>
+author:                 Trevor L. McDonell <trevor.mcdonell@gmail.com>
+maintainer:             Trevor L. McDonell <trevor.mcdonell@gmail.com>
+copyright:              Copyright (c) [2017]. Trevor L. McDonell <trevor.mcdonell@gmail.com>
 category:               Foreign
 cabal-version:          >=1.24
 
@@ -78,6 +78,7 @@ library
     , cusparse                          >= 0.1
     , half                              >= 0.1
     , storable-complex                  >= 0.2
+    , template-haskell
 
   build-tools:
       c2hs                              >= 0.16
@@ -96,6 +97,6 @@ source-repository head
 source-repository this
     type:               git
     location:           https://github.com/tmcdonell/cusolver
-    tag:                0.1.0.1
+    tag:                v0.2.0.0
 
 -- vim: nospell
