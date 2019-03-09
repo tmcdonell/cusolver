@@ -81,6 +81,14 @@ module Foreign.CUDA.Solver.Dense.Linear (
   dormqr_bufferSize,
   cunmqr_bufferSize,
   zunmqr_bufferSize,
+  spotri,
+  dpotri,
+  cpotri,
+  zpotri,
+  spotri_bufferSize,
+  dpotri_bufferSize,
+  cpotri_bufferSize,
+  zpotri_bufferSize,
 
 ) where
 
@@ -312,4 +320,55 @@ cunmqr_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cunmqr_bufferSize' r
 
 zunmqr_bufferSize :: Handle -> Side -> Operation -> Int -> Int -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> Int -> IO ()
 zunmqr_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zunmqr_bufferSize' requires at least cuda-8.0"
+#endif
+#if CUDA_VERSION >= 10010
+
+{-# INLINEABLE spotri #-}
+{# fun unsafe cusolverDnSpotri as spotri { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dpotri #-}
+{# fun unsafe cusolverDnDpotri as dpotri { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cpotri #-}
+{# fun unsafe cusolverDnCpotri as cpotri { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zpotri #-}
+{# fun unsafe cusolverDnZpotri as zpotri { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE spotri_bufferSize #-}
+{# fun unsafe cusolverDnSpotri_bufferSize as spotri_bufferSize { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dpotri_bufferSize #-}
+{# fun unsafe cusolverDnDpotri_bufferSize as dpotri_bufferSize { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr Double', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cpotri_bufferSize #-}
+{# fun unsafe cusolverDnCpotri_bufferSize as cpotri_bufferSize { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Float)', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zpotri_bufferSize #-}
+{# fun unsafe cusolverDnZpotri_bufferSize as zpotri_bufferSize { useHandle `Handle', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+#else
+
+spotri :: Handle -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> DevicePtr Int32 -> IO ()
+spotri _ _ _ _ _ _ _ _ = cusolverError "'spotri' requires at least cuda-10.0"
+
+dpotri :: Handle -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> DevicePtr Int32 -> IO ()
+dpotri _ _ _ _ _ _ _ _ = cusolverError "'dpotri' requires at least cuda-10.0"
+
+cpotri :: Handle -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> IO ()
+cpotri _ _ _ _ _ _ _ _ = cusolverError "'cpotri' requires at least cuda-10.0"
+
+zpotri :: Handle -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> IO ()
+zpotri _ _ _ _ _ _ _ _ = cusolverError "'zpotri' requires at least cuda-10.0"
+
+spotri_bufferSize :: Handle -> Fill -> Int -> DevicePtr Float -> Int -> Int -> IO ()
+spotri_bufferSize _ _ _ _ _ _ = cusolverError "'spotri_bufferSize' requires at least cuda-10.0"
+
+dpotri_bufferSize :: Handle -> Fill -> Int -> DevicePtr Double -> Int -> Int -> IO ()
+dpotri_bufferSize _ _ _ _ _ _ = cusolverError "'dpotri_bufferSize' requires at least cuda-10.0"
+
+cpotri_bufferSize :: Handle -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> Int -> IO ()
+cpotri_bufferSize _ _ _ _ _ _ = cusolverError "'cpotri_bufferSize' requires at least cuda-10.0"
+
+zpotri_bufferSize :: Handle -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> Int -> IO ()
+zpotri_bufferSize _ _ _ _ _ _ = cusolverError "'zpotri_bufferSize' requires at least cuda-10.0"
 #endif

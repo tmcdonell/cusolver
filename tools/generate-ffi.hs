@@ -38,6 +38,7 @@ main = do
                 , "Operation(..)"
                 , "EigMode(..)"
                 , "EigType(..)"
+                , "EigRange(..)"
                 , "Info_gesvdj"
                 , "Info_syevj"
                 ]
@@ -51,14 +52,16 @@ main = do
                 ]
   --
   mkC2HS "Dense" "Linear" (docs "cuds-linearsolver") d1exp
-    [(Nothing,   funs_denseLinear)
-    ,(Just 8000, funs_denseLinear_cuda80)
+    [(Nothing,    funs_denseLinear)
+    ,(Just 8000,  funs_denseLinear_cuda80)
+    ,(Just 10010, funs_denseLinear_cuda101)
     ]
 
   mkC2HS "Dense" "Eigenvalue" (docs "cuds-eigensolver") d2exp
-    [(Nothing,   funs_denseEigen)
-    ,(Just 8000, funs_denseEigen_cuda80)
-    ,(Just 9000, funs_denseEigen_cuda90)
+    [(Nothing,    funs_denseEigen)
+    ,(Just 8000,  funs_denseEigen_cuda80)
+    ,(Just 9000,  funs_denseEigen_cuda90)
+    ,(Just 10010, funs_denseEigen_cuda101)
     ]
 
   mkC2HS "Sparse" "High" (docs "cusolver-high-level-function") s1exp
@@ -412,6 +415,9 @@ eigmode = TEnum "EigMode"
 eigtype :: Type
 eigtype = TEnum "EigType"
 
+eigrange :: Type
+eigrange = TEnum "EigRange"
+
 matdescr :: Type
 matdescr = TPrim "useMatDescr" "MatrixDescriptor" ""
 
@@ -472,6 +478,12 @@ funs_denseLinear_cuda80 =
   , gpC $ \ a   -> dn "?ungqr"            [ int, int, int, dptr a, int, dptr a, dptr a, int, dptr int32 ]
   , gpR $ \ a   -> dn "?ormqr_bufferSize" [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, result int ]
   , gpC $ \ a   -> dn "?unmqr_bufferSize" [ side, transpose, int, int, int, dptr a, int, dptr a, dptr a, int, result int ]
+  ]
+
+funs_denseLinear_cuda101 :: [FunGroup]
+funs_denseLinear_cuda101 =
+  [ gpA $ \ a   -> dn "?potri"            [ uplo, int, dptr a, int, dptr a, int, dptr int32 ]
+  , gpA $ \ a   -> dn "?potri_bufferSize" [ uplo, int, dptr a, int, result int ]
   ]
 
 
@@ -535,6 +547,19 @@ funs_denseEigen_cuda90 =
   , gpC $ \ a   -> dn "?hegvj"                    [ eigtype, eigmode, uplo, int, dptr a, int, dptr a, int, dptr a, dptr a, int, dptr int32, info_syevj ]
   ]
 
+funs_denseEigen_cuda101 :: [FunGroup]
+funs_denseEigen_cuda101 =
+  [ gpA $ \ a   -> dn "?gesvdaStridedBatched"            [ eigmode, int, int, int, dptr a, int, int64, dptr a, int64, dptr a, int, int64, dptr a, int, int64, dptr a, int, dptr int32, ptr double, int ]
+  , gpA $ \ a   -> dn "?gesvdaStridedBatched_bufferSize" [ eigmode, int, int, int, dptr a, int, int64, dptr a, int64, dptr a, int, int64, dptr a, int, int64, result int, int ]
+  , gpR $ \ a   -> dn "?syevdx"                          [ eigmode, eigrange, uplo, int, dptr a, int, a, a, int, int, result int, dptr a, dptr a, int, dptr int32 ]
+  , gpR $ \ a   -> dn "?syevdx_bufferSize"               [ eigmode, eigrange, uplo, int, dptr a, int, a, a, int, int, result int, dptr a, result int ]
+  , gpQ $ \ a   -> dn "?heevdx"                          [ eigmode, eigrange, uplo, int, dptr (complex a), int, a, a, int, int, result int, dptr a, dptr (complex a), int, dptr int32 ]
+  , gpQ $ \ a   -> dn "?heevdx_bufferSize"               [ eigmode, eigrange, uplo, int, dptr (complex a), int, a, a, int, int, result int, dptr a, result int ]
+  , gpR $ \ a   -> dn "?sygvdx"                          [ eigtype, eigmode, eigrange, uplo, int, dptr a, int, dptr a, int, a, a, int, int, result int, dptr a, dptr a, int, dptr int32 ]
+  , gpR $ \ a   -> dn "?sygvdx_bufferSize"               [ eigtype, eigmode, eigrange, uplo, int, dptr a, int, dptr a, int, a, a, int, int, result int, dptr a, result int ]
+  , gpQ $ \ a   -> dn "?hegvdx"                          [ eigtype, eigmode, eigrange, uplo, int, dptr (complex a), int, dptr (complex a), int, a, a, int, int, result int, dptr a, dptr (complex a), int, dptr int32 ]
+  , gpQ $ \ a   -> dn "?hegvdx_bufferSize"               [ eigtype, eigmode, eigrange, uplo, int, dptr (complex a), int, dptr (complex a), int, a, a, int, int, result int, dptr a, result int ]
+  ]
 
 -- | Sparse LAPACK function reference
 --

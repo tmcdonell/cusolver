@@ -19,6 +19,7 @@ module Foreign.CUDA.Solver.Internal.Types (
   BLAS.Side(..),
   EigType(..),
   EigMode(..),
+  EigRange(..),
 
   -- Sparse
   Sparse.MatrixDescriptor(..),
@@ -75,6 +76,17 @@ data EigType
   with prefix="CUSOLVER_EIG_MODE" deriving (Eq, Show) #}
 #else
 data EigMode
+#endif
+
+-- | This type indicates which selection of eigenvalues and optionally
+-- eigenvectors need to be computed
+--
+#if CUDA_VERSION >= 10010
+{# enum cusolverEigRange_t as EigRange
+  { underscoreToCase }
+  with prefix="CUSOLVER_EIG_RANGE" deriving (Eq, Show) #}
+#else
+data EigRange
 #endif
 
 

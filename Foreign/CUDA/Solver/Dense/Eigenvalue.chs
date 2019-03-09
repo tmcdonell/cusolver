@@ -28,6 +28,7 @@ module Foreign.CUDA.Solver.Dense.Eigenvalue (
   Operation(..),
   EigMode(..),
   EigType(..),
+  EigRange(..),
   Info_gesvdj,
   Info_syevj,
   sgebrd_bufferSize,
@@ -134,6 +135,30 @@ module Foreign.CUDA.Solver.Dense.Eigenvalue (
   zhegvj_bufferSize,
   chegvj,
   zhegvj,
+  sgesvdaStridedBatched,
+  dgesvdaStridedBatched,
+  cgesvdaStridedBatched,
+  zgesvdaStridedBatched,
+  sgesvdaStridedBatched_bufferSize,
+  dgesvdaStridedBatched_bufferSize,
+  cgesvdaStridedBatched_bufferSize,
+  zgesvdaStridedBatched_bufferSize,
+  ssyevdx,
+  dsyevdx,
+  ssyevdx_bufferSize,
+  dsyevdx_bufferSize,
+  cheevdx,
+  zheevdx,
+  cheevdx_bufferSize,
+  zheevdx_bufferSize,
+  ssygvdx,
+  dsygvdx,
+  ssygvdx_bufferSize,
+  dsygvdx_bufferSize,
+  chegvdx,
+  zhegvdx,
+  chegvdx_bufferSize,
+  zhegvdx_bufferSize,
 
 ) where
 
@@ -740,4 +765,151 @@ chegvj _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'chegvj' requires at least c
 
 zhegvj :: Handle -> EigType -> EigMode -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> Info_syevj -> IO ()
 zhegvj _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zhegvj' requires at least cuda-9.0"
+#endif
+#if CUDA_VERSION >= 10010
+
+{-# INLINEABLE sgesvdaStridedBatched #-}
+{# fun unsafe cusolverDnSgesvdaStridedBatched as sgesvdaStridedBatched { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr Float', `Int', `Int64', useDevP `DevicePtr Float', `Int64', useDevP `DevicePtr Float', `Int', `Int64', useDevP `DevicePtr Float', `Int', `Int64', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Int32', castPtr `Ptr Double', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dgesvdaStridedBatched #-}
+{# fun unsafe cusolverDnDgesvdaStridedBatched as dgesvdaStridedBatched { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr Double', `Int', `Int64', useDevP `DevicePtr Double', `Int64', useDevP `DevicePtr Double', `Int', `Int64', useDevP `DevicePtr Double', `Int', `Int64', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Int32', castPtr `Ptr Double', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cgesvdaStridedBatched #-}
+{# fun unsafe cusolverDnCgesvdaStridedBatched as cgesvdaStridedBatched { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr (Complex Float)', `Int', `Int64', useDevP `DevicePtr (Complex Float)', `Int64', useDevP `DevicePtr (Complex Float)', `Int', `Int64', useDevP `DevicePtr (Complex Float)', `Int', `Int64', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr Int32', castPtr `Ptr Double', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zgesvdaStridedBatched #-}
+{# fun unsafe cusolverDnZgesvdaStridedBatched as zgesvdaStridedBatched { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr (Complex Double)', `Int', `Int64', useDevP `DevicePtr (Complex Double)', `Int64', useDevP `DevicePtr (Complex Double)', `Int', `Int64', useDevP `DevicePtr (Complex Double)', `Int', `Int64', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32', castPtr `Ptr Double', `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE sgesvdaStridedBatched_bufferSize #-}
+{# fun unsafe cusolverDnSgesvdaStridedBatched_bufferSize as sgesvdaStridedBatched_bufferSize { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr Float', `Int', `Int64', useDevP `DevicePtr Float', `Int64', useDevP `DevicePtr Float', `Int', `Int64', useDevP `DevicePtr Float', `Int', `Int64', alloca- `Int' peekIntConv*, `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dgesvdaStridedBatched_bufferSize #-}
+{# fun unsafe cusolverDnDgesvdaStridedBatched_bufferSize as dgesvdaStridedBatched_bufferSize { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr Double', `Int', `Int64', useDevP `DevicePtr Double', `Int64', useDevP `DevicePtr Double', `Int', `Int64', useDevP `DevicePtr Double', `Int', `Int64', alloca- `Int' peekIntConv*, `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cgesvdaStridedBatched_bufferSize #-}
+{# fun unsafe cusolverDnCgesvdaStridedBatched_bufferSize as cgesvdaStridedBatched_bufferSize { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr (Complex Float)', `Int', `Int64', useDevP `DevicePtr (Complex Float)', `Int64', useDevP `DevicePtr (Complex Float)', `Int', `Int64', useDevP `DevicePtr (Complex Float)', `Int', `Int64', alloca- `Int' peekIntConv*, `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zgesvdaStridedBatched_bufferSize #-}
+{# fun unsafe cusolverDnZgesvdaStridedBatched_bufferSize as zgesvdaStridedBatched_bufferSize { useHandle `Handle', cFromEnum `EigMode', `Int', `Int', `Int', useDevP `DevicePtr (Complex Double)', `Int', `Int64', useDevP `DevicePtr (Complex Double)', `Int64', useDevP `DevicePtr (Complex Double)', `Int', `Int64', useDevP `DevicePtr (Complex Double)', `Int', `Int64', alloca- `Int' peekIntConv*, `Int' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE ssyevdx #-}
+{# fun unsafe cusolverDnSsyevdx as ssyevdx { useHandle `Handle', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', CFloat `Float', CFloat `Float', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dsyevdx #-}
+{# fun unsafe cusolverDnDsyevdx as dsyevdx { useHandle `Handle', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr Double', `Int', CDouble `Double', CDouble `Double', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE ssyevdx_bufferSize #-}
+{# fun unsafe cusolverDnSsyevdx_bufferSize as ssyevdx_bufferSize { useHandle `Handle', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', CFloat `Float', CFloat `Float', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Float', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dsyevdx_bufferSize #-}
+{# fun unsafe cusolverDnDsyevdx_bufferSize as dsyevdx_bufferSize { useHandle `Handle', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr Double', `Int', CDouble `Double', CDouble `Double', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Double', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cheevdx #-}
+{# fun unsafe cusolverDnCheevdx as cheevdx { useHandle `Handle', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Float)', `Int', CFloat `Float', CFloat `Float', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Float', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zheevdx #-}
+{# fun unsafe cusolverDnZheevdx as zheevdx { useHandle `Handle', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', CDouble `Double', CDouble `Double', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Double', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE cheevdx_bufferSize #-}
+{# fun unsafe cusolverDnCheevdx_bufferSize as cheevdx_bufferSize { useHandle `Handle', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Float)', `Int', CFloat `Float', CFloat `Float', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Float', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zheevdx_bufferSize #-}
+{# fun unsafe cusolverDnZheevdx_bufferSize as zheevdx_bufferSize { useHandle `Handle', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', CDouble `Double', CDouble `Double', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Double', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE ssygvdx #-}
+{# fun unsafe cusolverDnSsygvdx as ssygvdx { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', CFloat `Float', CFloat `Float', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Float', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dsygvdx #-}
+{# fun unsafe cusolverDnDsygvdx as dsygvdx { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', CDouble `Double', CDouble `Double', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Double', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE ssygvdx_bufferSize #-}
+{# fun unsafe cusolverDnSsygvdx_bufferSize as ssygvdx_bufferSize { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr Float', `Int', useDevP `DevicePtr Float', `Int', CFloat `Float', CFloat `Float', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Float', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE dsygvdx_bufferSize #-}
+{# fun unsafe cusolverDnDsygvdx_bufferSize as dsygvdx_bufferSize { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr Double', `Int', useDevP `DevicePtr Double', `Int', CDouble `Double', CDouble `Double', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Double', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE chegvdx #-}
+{# fun unsafe cusolverDnChegvdx as chegvdx { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', CFloat `Float', CFloat `Float', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Float', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zhegvdx #-}
+{# fun unsafe cusolverDnZhegvdx as zhegvdx { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', CDouble `Double', CDouble `Double', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Double', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr Int32' } -> `()' checkStatus*- #}
+
+{-# INLINEABLE chegvdx_bufferSize #-}
+{# fun unsafe cusolverDnChegvdx_bufferSize as chegvdx_bufferSize { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Float)', `Int', useDevP `DevicePtr (Complex Float)', `Int', CFloat `Float', CFloat `Float', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Float', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+
+{-# INLINEABLE zhegvdx_bufferSize #-}
+{# fun unsafe cusolverDnZhegvdx_bufferSize as zhegvdx_bufferSize { useHandle `Handle', cFromEnum `EigType', cFromEnum `EigMode', cFromEnum `EigRange', cFromEnum `Fill', `Int', useDevP `DevicePtr (Complex Double)', `Int', useDevP `DevicePtr (Complex Double)', `Int', CDouble `Double', CDouble `Double', `Int', `Int', alloca- `Int' peekIntConv*, useDevP `DevicePtr Double', alloca- `Int' peekIntConv* } -> `()' checkStatus*- #}
+#else
+
+sgesvdaStridedBatched :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr Float -> Int -> Int64 -> DevicePtr Float -> Int64 -> DevicePtr Float -> Int -> Int64 -> DevicePtr Float -> Int -> Int64 -> DevicePtr Float -> Int -> DevicePtr Int32 -> Ptr Double -> Int -> IO ()
+sgesvdaStridedBatched _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'sgesvdaStridedBatched' requires at least cuda-10.0"
+
+dgesvdaStridedBatched :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr Double -> Int -> Int64 -> DevicePtr Double -> Int64 -> DevicePtr Double -> Int -> Int64 -> DevicePtr Double -> Int -> Int64 -> DevicePtr Double -> Int -> DevicePtr Int32 -> Ptr Double -> Int -> IO ()
+dgesvdaStridedBatched _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dgesvdaStridedBatched' requires at least cuda-10.0"
+
+cgesvdaStridedBatched :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr (Complex Float) -> Int -> Int64 -> DevicePtr (Complex Float) -> Int64 -> DevicePtr (Complex Float) -> Int -> Int64 -> DevicePtr (Complex Float) -> Int -> Int64 -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> Ptr Double -> Int -> IO ()
+cgesvdaStridedBatched _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cgesvdaStridedBatched' requires at least cuda-10.0"
+
+zgesvdaStridedBatched :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr (Complex Double) -> Int -> Int64 -> DevicePtr (Complex Double) -> Int64 -> DevicePtr (Complex Double) -> Int -> Int64 -> DevicePtr (Complex Double) -> Int -> Int64 -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> Ptr Double -> Int -> IO ()
+zgesvdaStridedBatched _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zgesvdaStridedBatched' requires at least cuda-10.0"
+
+sgesvdaStridedBatched_bufferSize :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr Float -> Int -> Int64 -> DevicePtr Float -> Int64 -> DevicePtr Float -> Int -> Int64 -> DevicePtr Float -> Int -> Int64 -> Int -> Int -> IO ()
+sgesvdaStridedBatched_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'sgesvdaStridedBatched_bufferSize' requires at least cuda-10.0"
+
+dgesvdaStridedBatched_bufferSize :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr Double -> Int -> Int64 -> DevicePtr Double -> Int64 -> DevicePtr Double -> Int -> Int64 -> DevicePtr Double -> Int -> Int64 -> Int -> Int -> IO ()
+dgesvdaStridedBatched_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dgesvdaStridedBatched_bufferSize' requires at least cuda-10.0"
+
+cgesvdaStridedBatched_bufferSize :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr (Complex Float) -> Int -> Int64 -> DevicePtr (Complex Float) -> Int64 -> DevicePtr (Complex Float) -> Int -> Int64 -> DevicePtr (Complex Float) -> Int -> Int64 -> Int -> Int -> IO ()
+cgesvdaStridedBatched_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cgesvdaStridedBatched_bufferSize' requires at least cuda-10.0"
+
+zgesvdaStridedBatched_bufferSize :: Handle -> EigMode -> Int -> Int -> Int -> DevicePtr (Complex Double) -> Int -> Int64 -> DevicePtr (Complex Double) -> Int64 -> DevicePtr (Complex Double) -> Int -> Int64 -> DevicePtr (Complex Double) -> Int -> Int64 -> Int -> Int -> IO ()
+zgesvdaStridedBatched_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zgesvdaStridedBatched_bufferSize' requires at least cuda-10.0"
+
+ssyevdx :: Handle -> EigMode -> EigRange -> Fill -> Int -> DevicePtr Float -> Int -> Float -> Float -> Int -> Int -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Int32 -> IO ()
+ssyevdx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'ssyevdx' requires at least cuda-10.0"
+
+dsyevdx :: Handle -> EigMode -> EigRange -> Fill -> Int -> DevicePtr Double -> Int -> Double -> Double -> Int -> Int -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Int32 -> IO ()
+dsyevdx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dsyevdx' requires at least cuda-10.0"
+
+ssyevdx_bufferSize :: Handle -> EigMode -> EigRange -> Fill -> Int -> DevicePtr Float -> Int -> Float -> Float -> Int -> Int -> Int -> DevicePtr Float -> Int -> IO ()
+ssyevdx_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'ssyevdx_bufferSize' requires at least cuda-10.0"
+
+dsyevdx_bufferSize :: Handle -> EigMode -> EigRange -> Fill -> Int -> DevicePtr Double -> Int -> Double -> Double -> Int -> Int -> Int -> DevicePtr Double -> Int -> IO ()
+dsyevdx_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dsyevdx_bufferSize' requires at least cuda-10.0"
+
+cheevdx :: Handle -> EigMode -> EigRange -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> Float -> Float -> Int -> Int -> Int -> DevicePtr Float -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> IO ()
+cheevdx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cheevdx' requires at least cuda-10.0"
+
+zheevdx :: Handle -> EigMode -> EigRange -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> Double -> Double -> Int -> Int -> Int -> DevicePtr Double -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> IO ()
+zheevdx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zheevdx' requires at least cuda-10.0"
+
+cheevdx_bufferSize :: Handle -> EigMode -> EigRange -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> Float -> Float -> Int -> Int -> Int -> DevicePtr Float -> Int -> IO ()
+cheevdx_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'cheevdx_bufferSize' requires at least cuda-10.0"
+
+zheevdx_bufferSize :: Handle -> EigMode -> EigRange -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> Double -> Double -> Int -> Int -> Int -> DevicePtr Double -> Int -> IO ()
+zheevdx_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zheevdx_bufferSize' requires at least cuda-10.0"
+
+ssygvdx :: Handle -> EigType -> EigMode -> EigRange -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> Float -> Float -> Int -> Int -> Int -> DevicePtr Float -> DevicePtr Float -> Int -> DevicePtr Int32 -> IO ()
+ssygvdx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'ssygvdx' requires at least cuda-10.0"
+
+dsygvdx :: Handle -> EigType -> EigMode -> EigRange -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> Double -> Double -> Int -> Int -> Int -> DevicePtr Double -> DevicePtr Double -> Int -> DevicePtr Int32 -> IO ()
+dsygvdx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dsygvdx' requires at least cuda-10.0"
+
+ssygvdx_bufferSize :: Handle -> EigType -> EigMode -> EigRange -> Fill -> Int -> DevicePtr Float -> Int -> DevicePtr Float -> Int -> Float -> Float -> Int -> Int -> Int -> DevicePtr Float -> Int -> IO ()
+ssygvdx_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'ssygvdx_bufferSize' requires at least cuda-10.0"
+
+dsygvdx_bufferSize :: Handle -> EigType -> EigMode -> EigRange -> Fill -> Int -> DevicePtr Double -> Int -> DevicePtr Double -> Int -> Double -> Double -> Int -> Int -> Int -> DevicePtr Double -> Int -> IO ()
+dsygvdx_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'dsygvdx_bufferSize' requires at least cuda-10.0"
+
+chegvdx :: Handle -> EigType -> EigMode -> EigRange -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> Float -> Float -> Int -> Int -> Int -> DevicePtr Float -> DevicePtr (Complex Float) -> Int -> DevicePtr Int32 -> IO ()
+chegvdx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'chegvdx' requires at least cuda-10.0"
+
+zhegvdx :: Handle -> EigType -> EigMode -> EigRange -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> Double -> Double -> Int -> Int -> Int -> DevicePtr Double -> DevicePtr (Complex Double) -> Int -> DevicePtr Int32 -> IO ()
+zhegvdx _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zhegvdx' requires at least cuda-10.0"
+
+chegvdx_bufferSize :: Handle -> EigType -> EigMode -> EigRange -> Fill -> Int -> DevicePtr (Complex Float) -> Int -> DevicePtr (Complex Float) -> Int -> Float -> Float -> Int -> Int -> Int -> DevicePtr Float -> Int -> IO ()
+chegvdx_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'chegvdx_bufferSize' requires at least cuda-10.0"
+
+zhegvdx_bufferSize :: Handle -> EigType -> EigMode -> EigRange -> Fill -> Int -> DevicePtr (Complex Double) -> Int -> DevicePtr (Complex Double) -> Int -> Double -> Double -> Int -> Int -> Int -> DevicePtr Double -> Int -> IO ()
+zhegvdx_bufferSize _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ = cusolverError "'zhegvdx_bufferSize' requires at least cuda-10.0"
 #endif
