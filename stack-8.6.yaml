@@ -1,15 +1,19 @@
 # For more information, see: https://github.com/commercialhaskell/stack/blob/release/doc/yaml_configuration.md
 # vim: nospell
 
-resolver: nightly-2018-10-02
+resolver: lts-13.5
 
 packages:
-- '.'
+- .
 
 extra-deps:
-- cuda-0.10.0.0
+- git:    https://github.com/tmcdonell/cuda.git
+  commit: e430bccdd9eca72733a972e7eaa25a36289808b4
+
+- git:    https://github.com/tmcdonell/cusparse.git
+  commit: 9f5b02aa79e54f79c3d003969cae4d597207e734
+
 - cublas-0.5.0.0
-- cusparse-0.2.0.0
 
 # Override default flag values for local packages and extra-deps
 # flags: {}
