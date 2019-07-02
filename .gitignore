@@ -2,3 +2,4 @@
 /dist
 /.stack-work
 /cusolver.buildinfo.generated
+/stack.yaml.lock
