@@ -7,9 +7,7 @@ packages:
 - .
 
 extra-deps:
-- git:    https://github.com/tmcdonell/cuda.git
-  commit: e430bccdd9eca72733a972e7eaa25a36289808b4
-
+- cuda-0.10.1.0
 - cublas-0.5.0.0
 - cusparse-0.2.0.0
 
