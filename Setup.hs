@@ -149,7 +149,11 @@ libraryBuildInfo profile platform@(Platform arch os) ghcVersion = do
     , extraLibs      = extraLibs'
     , extraGHCiLibs  = extraGHCiLibs'
     , extraLibDirs   = extraLibDirs'
+#if MIN_VERSION_Cabal(3,0,0)
+    , options        = PerCompilerFlavor (if os /= Windows then ghcOptions else []) []
+#else
     , options        = [(GHC, ghcOptions) | os /= Windows]
+#endif
     , customFieldsBI = [c2hsExtraOptions]
     }
 
