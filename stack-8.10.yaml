@@ -1,20 +1,15 @@
 # For advanced use and comprehensive documentation of the format, please see:
 # https://docs.haskellstack.org/en/stable/yaml_configuration/
 
-resolver: nightly-2020-08-12
+resolver: nightly-2020-08-26
 
 packages:
 - .
 
 extra-deps:
-- github: tmcdonell/cuda
-  commit: c7d054747bf5787c7938338f6791e884c8e18987
-
-- github: tmcdonell/cublas
-  commit: 676e0fa48820466c1e5ae66fe8efcee39912c063
-
-- github: tmcdonell/cusparse
-  commit: 3437ce9e32d8c0d1e1f4079f8ac06e23b606c7e4
+- cublas-0.6.0.0
+- cuda-0.10.2.0
+- cusparse-0.3.0.0
 
 # Override default flag values for local packages and extra-deps
 # flags: {}
